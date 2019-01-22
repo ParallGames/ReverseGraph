@@ -14,7 +14,7 @@ public class Multiplication extends Operation {
 
 	@Override
 	public void compute() {
-		this.output = factor1.getOutput() * factor2.getOutput();
+		this.output = factor1.getValue() * factor2.getValue();
 	}
 
 	@Override
@@ -25,11 +25,11 @@ public class Multiplication extends Operation {
 	@Override
 	public void computeDependenciesDerivative() {
 		if (factor1 instanceof Derivable) {
-			((Derivable) factor1).addToDerivative(derivative * factor2.getOutput());
+			((Derivable) factor1).addToDerivative(derivative * factor2.getValue());
 		}
 
 		if (factor2 instanceof Derivable) {
-			((Derivable) factor2).addToDerivative(derivative * factor1.getOutput());
+			((Derivable) factor2).addToDerivative(derivative * factor1.getValue());
 		}
 	}
 }

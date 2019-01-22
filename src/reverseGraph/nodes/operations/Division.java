@@ -14,7 +14,7 @@ public class Division extends Operation {
 
 	@Override
 	public void compute() {
-		this.output = dividend.getOutput() / divisor.getOutput();
+		this.output = dividend.getValue() / divisor.getValue();
 	}
 
 	@Override
@@ -25,12 +25,12 @@ public class Division extends Operation {
 	@Override
 	public void computeDependenciesDerivative() {
 		if (dividend instanceof Derivable) {
-			((Derivable) dividend).addToDerivative(derivative / divisor.getOutput());
+			((Derivable) dividend).addToDerivative(derivative / divisor.getValue());
 		}
 
 		if (divisor instanceof Derivable) {
 			((Derivable) divisor)
-					.addToDerivative(-derivative * dividend.getOutput() / (divisor.getOutput() * divisor.getOutput()));
+					.addToDerivative(-derivative * dividend.getValue() / (divisor.getValue() * divisor.getValue()));
 		}
 	}
 }

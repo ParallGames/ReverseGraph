@@ -13,7 +13,7 @@ public class Sigmoid extends Operation {
 
 	@Override
 	public void compute() {
-		this.output = 1D / (1D + Math.exp(-input.getOutput()));
+		this.output = 1D / (1D + Math.exp(-input.getValue()));
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class Sigmoid extends Operation {
 	@Override
 	public void computeDependenciesDerivative() {
 		if (input instanceof Derivable) {
-			double exp = Math.exp(input.getOutput());
+			double exp = Math.exp(input.getValue());
 
 			double divider = exp + 1;
 			divider *= divider;

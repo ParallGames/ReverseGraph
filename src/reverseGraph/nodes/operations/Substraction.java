@@ -14,7 +14,7 @@ public class Substraction extends Operation {
 
 	@Override
 	public void compute() {
-		this.output = minuend.getOutput() - substraend.getOutput();
+		this.output = minuend.getValue() - substraend.getValue();
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class LeakyRelu extends Operation {
 
 	@Override
 	public void compute() {
-		this.output = (input.getOutput() > 0) ? input.getOutput() : input.getOutput() * 0.01;
+		this.output = (input.getValue() > 0) ? input.getValue() : input.getValue() * 0.01;
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class LeakyRelu extends Operation {
 	@Override
 	public void computeDependenciesDerivative() {
 		if (input instanceof Derivable) {
-			double result = (input.getOutput() > 0) ? 1 : 0.01;
+			double result = (input.getValue() > 0) ? 1 : 0.01;
 
 			((Derivable) input).addToDerivative(result * this.derivative);
 		}

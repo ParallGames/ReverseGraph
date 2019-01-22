@@ -15,7 +15,7 @@ public class Sum extends Operation {
 		double output = 0;
 
 		for (Node node : addends) {
-			output += node.getOutput();
+			output += node.getValue();
 		}
 
 		this.output = output;

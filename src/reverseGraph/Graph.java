@@ -19,6 +19,12 @@ public class Graph {
 
 	private int exemplesCount = 0;
 
+	/**
+	 * Constructs a graph to compute an operation and its dependencies
+	 * 
+	 * @param operation the operation to compute
+	 * @param optimizer an optimizer that updates the parameters
+	 */
 	public Graph(Operation operation, Optimizer optimizer) {
 		findDependentNodes(operation);
 
@@ -55,6 +61,9 @@ public class Graph {
 		operationsList.add(operation);
 	}
 
+	/**
+	 * Compute all operations of the graph
+	 */
 	public void compute() {
 		for (int i = 0; i < operations.length; i++) {
 			operations[i].compute();
@@ -86,6 +95,9 @@ public class Graph {
 		exemplesCount++;
 	}
 
+	/**
+	 * Minimizes the graph output by updating its parameters
+	 */
 	public void minimize() {
 		if (exemplesCount == 0) {
 			return;
@@ -96,7 +108,7 @@ public class Graph {
 
 			double gradient = derivatives[i] / exemplesCount;
 
-			p.setValue(p.getOutput() - optimizers[i].computeUpdate(gradient));
+			p.setValue(p.getValue() - optimizers[i].computeUpdate(gradient));
 
 			derivatives[i] = 0;
 		}
@@ -113,9 +125,7 @@ public class Graph {
 			for (Node dep : op.getDependencies()) {
 				if (dep instanceof Operation) {
 					addOperation((Operation) dep);
-				}
-
-				if (dep instanceof Param) {
+				} else if (dep instanceof Param) {
 					addParam((Param) dep);
 				}
 			}

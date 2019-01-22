@@ -1,6 +1,6 @@
 package reverseGraph.nodes;
 
-public class Derivable extends Node {
+public abstract class Derivable extends Node {
 	protected double derivative = 0;
 
 	public void resetDerivative() {

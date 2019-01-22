@@ -13,7 +13,7 @@ public class Abs extends Operation {
 
 	@Override
 	public void compute() {
-		double input = this.input.getOutput();
+		double input = this.input.getValue();
 
 		this.output = input > 0 ? input : -input;
 	}
@@ -26,7 +26,7 @@ public class Abs extends Operation {
 	@Override
 	public void computeDependenciesDerivative() {
 		if (this.input instanceof Derivable) {
-			double input = this.input.getOutput();
+			double input = this.input.getValue();
 			((Derivable) this.input).addToDerivative(input > 0 ? derivative : -derivative);
 		}
 	}

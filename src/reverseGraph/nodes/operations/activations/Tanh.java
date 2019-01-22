@@ -13,7 +13,7 @@ public class Tanh extends Operation {
 
 	@Override
 	public void compute() {
-		this.output = Math.tanh(input.getOutput());
+		this.output = Math.tanh(input.getValue());
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class Tanh extends Operation {
 	@Override
 	public void computeDependenciesDerivative() {
 		if (input instanceof Derivable) {
-			double exp = Math.exp(2 * input.getOutput());
+			double exp = Math.exp(2 * input.getValue());
 
 			double divider = exp + 1;
 			divider *= divider;

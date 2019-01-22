@@ -13,7 +13,7 @@ public class SoftPlus extends Operation {
 
 	@Override
 	public void compute() {
-		this.output = Math.log(Math.exp(input.getOutput()) + 1);
+		this.output = Math.log(Math.exp(input.getValue()) + 1);
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class SoftPlus extends Operation {
 	@Override
 	public void computeDependenciesDerivative() {
 		if (input instanceof Derivable) {
-			double sigm = 1D / (1D + Math.exp(-input.getOutput()));
+			double sigm = 1D / (1D + Math.exp(-input.getValue()));
 
 			((Derivable) input).addToDerivative(sigm * this.derivative);
 		}

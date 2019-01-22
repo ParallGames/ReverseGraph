@@ -1,4 +1,4 @@
-package examples.xor;
+package examples;
 
 import reverseGraph.Graph;
 import reverseGraph.nodes.Input;
@@ -29,13 +29,14 @@ public class XOR {
 
 		// Net label (the desired output)
 		Input label = new Input(0);
-		
-		// Add operation to compute the difference between the current and the desired output
+
+		// Add operation to compute the difference between the current and the desired
+		// output
 		Substraction diff = new Substraction(output, label);
 		Multiplication loss = new Multiplication(diff, diff);
 
 		// Create a graph to compute all operations
-		Graph graph = new Graph(loss, new Adam(0.03, 0.9, 0.999));
+		Graph graph = new Graph(loss, new Adam(0.01, 0.9, 0.999));
 
 		double errorSum = 1;
 
@@ -46,11 +47,11 @@ public class XOR {
 			input1.setValue(-1);
 			input2.setValue(-1);
 			label.setValue(-1);
-			
+
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getOutput();
-			
+			errorSum += loss.getValue();
+
 			// Learn the current input
 			graph.computeDerivatives();
 			graph.minimize();
@@ -59,37 +60,37 @@ public class XOR {
 			input1.setValue(1);
 			input2.setValue(-1);
 			label.setValue(1);
-			
+
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getOutput();
-			
+			errorSum += loss.getValue();
+
 			// Learn the current input
 			graph.computeDerivatives();
 			graph.minimize();
-			
+
 			// Set input for 0 XOR 1 = 1
 			input1.setValue(-1);
 			input2.setValue(1);
 			label.setValue(1);
-			
+
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getOutput();
-			
+			errorSum += loss.getValue();
+
 			// Learn the current input
 			graph.computeDerivatives();
 			graph.minimize();
-			
-			// Set input for 1 XOR 1 = 1
+
+			// Set input for 1 XOR 1 = 0
 			input1.setValue(1);
 			input2.setValue(1);
-			label.setValue(1);
-			
+			label.setValue(0);
+
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getOutput();
-			
+			errorSum += loss.getValue();
+
 			// Learn the current input
 			graph.computeDerivatives();
 			graph.minimize();
