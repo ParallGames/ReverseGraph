@@ -17,29 +17,27 @@ public class Network {
 	private static final Random rand = new Random();
 
 	private static Operation createNeuron(Node[] inputs, Activation act, int outputSize) {
-		Multiplication[] muls = new Multiplication[inputs.length];
+		Node[] muls = new Node[inputs.length + 1];
 
 		for (int i = 0; i < inputs.length; i++) {
 			muls[i] = new Multiplication(new Param(rand.nextGaussian() * 2 / (inputs.length + outputSize)), inputs[i]);
 		}
 
+		muls[inputs.length] = new Param();
+
 		Sum sum = new Sum(muls);
-
-		Param bias = new Param(0);
-
-		Sum sum2 = new Sum(sum, bias);
 
 		switch (act) {
 		case IDENTITY:
-			return sum2;
+			return sum;
 		case LEAKYRELU:
-			return new LeakyRelu(sum2);
+			return new LeakyRelu(sum);
 		case SIGMOID:
-			return new Sigmoid(sum2);
+			return new Sigmoid(sum);
 		case TANH:
-			return new Tanh(sum2);
+			return new Tanh(sum);
 		case SOFTPLUS:
-			return new SoftPlus(sum2);
+			return new SoftPlus(sum);
 		}
 
 		throw new RuntimeException("Unknown activation");

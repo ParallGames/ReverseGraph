@@ -16,8 +16,8 @@ import vnl.model.LayerModel;
 public class XOR {
 	public static void main(String[] args) {
 		// Net inputs
-		Input input1 = new Input(0);
-		Input input2 = new Input(0);
+		Input input1 = new Input();
+		Input input2 = new Input();
 
 		// Create net model
 		LayerModel[] layers = new LayerModel[2];
@@ -28,7 +28,7 @@ public class XOR {
 		Operation output = Network.createNetwork(new Input[] { input1, input2 }, layers)[0];
 
 		// Net label (the desired output)
-		Input label = new Input(0);
+		Input label = new Input();
 
 		// Add operation to compute the difference between the current and the desired
 		// output
@@ -37,6 +37,9 @@ public class XOR {
 
 		// Create a graph to compute all operations
 		Graph graph = new Graph(loss, new Adam(0.01, 0.9, 0.999));
+
+		System.out.println(graph.paramsCount());
+		System.out.println(graph.operationsCount());
 
 		double errorSum = 1;
 
@@ -85,7 +88,7 @@ public class XOR {
 			// Set input for 1 XOR 1 = 0
 			input1.setValue(1);
 			input2.setValue(1);
-			label.setValue(0);
+			label.setValue(-1);
 
 			// Compute net output
 			graph.compute();

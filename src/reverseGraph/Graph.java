@@ -1,6 +1,7 @@
 package reverseGraph;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.Param;
@@ -12,7 +13,10 @@ public class Graph {
 	private final Operation[] operations;
 
 	private final ArrayList<Param> paramsList = new ArrayList<>();
+	private final HashSet<Param> paramsSet = new HashSet<>();
+
 	private final ArrayList<Operation> operationsList = new ArrayList<>();
+	private final HashSet<Operation> operationsSet = new HashSet<>();
 
 	private final double[] derivatives;
 	private final Optimizer[] optimizers;
@@ -32,9 +36,11 @@ public class Graph {
 
 		params = paramsList.toArray(new Param[0]);
 		paramsList.clear();
+		paramsSet.clear();
 
 		operations = operationsList.toArray(new Operation[0]);
 		operationsList.clear();
+		operationsSet.clear();
 
 		derivatives = new double[params.length];
 
@@ -46,19 +52,15 @@ public class Graph {
 	}
 
 	private void addParam(Param param) {
-		if (paramsList.contains(param)) {
-			return;
+		if (paramsSet.add(param)) {
+			paramsList.add(param);
 		}
-
-		paramsList.add(param);
 	}
 
 	private void addOperation(Operation operation) {
-		if (operationsList.contains(operation)) {
-			return;
+		if (operationsSet.add(operation)) {
+			operationsList.add(operation);
 		}
-
-		operationsList.add(operation);
 	}
 
 	/**
@@ -108,7 +110,7 @@ public class Graph {
 
 			double gradient = derivatives[i] / exemplesCount;
 
-			p.setValue(p.getValue() - optimizers[i].computeUpdate(gradient));
+			p.update(-optimizers[i].computeUpdate(gradient));
 
 			derivatives[i] = 0;
 		}
@@ -117,7 +119,7 @@ public class Graph {
 	}
 
 	private void findDependentNodes(Operation operation) {
-		operationsList.add(operation);
+		addOperation(operation);
 
 		for (int i = 0; i < operationsList.size(); i++) {
 			Operation op = operationsList.get(i);
@@ -134,6 +136,7 @@ public class Graph {
 
 	private void sortOperations() {
 		final ArrayList<Operation> sortedOperations = new ArrayList<>();
+		final HashSet<Operation> sortedOperationsSet = new HashSet<>();
 
 		while (!operationsList.isEmpty()) {
 			for (int i = operationsList.size() - 1; i >= 0; i--) {
@@ -142,19 +145,30 @@ public class Graph {
 				boolean canCompute = true;
 
 				for (Node n : op.getDependencies()) {
-					if (n instanceof Operation && !sortedOperations.contains(n)) {
+					if (n instanceof Operation && !sortedOperationsSet.contains(n)) {
 						canCompute = false;
 						break;
 					}
 				}
 
 				if (canCompute) {
-					sortedOperations.add(operationsList.remove(i));
+					operationsList.remove(i);
+
+					sortedOperations.add(op);
+					sortedOperationsSet.add(op);
 				}
 			}
 		}
 
 		operationsList.clear();
 		operationsList.addAll(sortedOperations);
+	}
+
+	public int operationsCount() {
+		return operations.length;
+	}
+
+	public int paramsCount() {
+		return params.length;
 	}
 }
