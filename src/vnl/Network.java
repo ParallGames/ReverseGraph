@@ -4,6 +4,7 @@ import java.util.Random;
 
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.Param;
+import reverseGraph.nodes.operations.Division;
 import reverseGraph.nodes.operations.Multiplication;
 import reverseGraph.nodes.operations.Operation;
 import reverseGraph.nodes.operations.Sum;
@@ -33,6 +34,7 @@ public class Network {
 		case LEAKYRELU:
 			return new LeakyRelu(sum);
 		case SIGMOID:
+		case SOFTMAX:
 			return new Sigmoid(sum);
 		case TANH:
 			return new Tanh(sum);
@@ -48,6 +50,14 @@ public class Network {
 
 		for (int i = 0; i < outputSize; i++) {
 			outputs[i] = createNeuron(inputs, activation, outputSize);
+		}
+
+		if (activation == Activation.SOFTMAX) {
+			Sum sum = new Sum(outputs);
+
+			for (int i = 0; i < outputSize; i++) {
+				outputs[i] = new Division(outputs[i], sum);
+			}
 		}
 
 		return outputs;

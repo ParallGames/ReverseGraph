@@ -20,9 +20,10 @@ public class XOR {
 		Input input2 = new Input();
 
 		// Create net model
-		LayerModel[] layers = new LayerModel[2];
-		layers[0] = new LayerModel(10, Activation.LEAKYRELU);
-		layers[1] = new LayerModel(1, Activation.TANH);
+		LayerModel[] layers = new LayerModel[3];
+		layers[0] = new LayerModel(10000, Activation.LEAKYRELU);
+		layers[1] = new LayerModel(100, Activation.LEAKYRELU);
+		layers[2] = new LayerModel(1, Activation.TANH);
 
 		// Create net
 		Operation output = Network.createNetwork(new Input[] { input1, input2 }, layers)[0];
@@ -36,7 +37,7 @@ public class XOR {
 		Multiplication loss = new Multiplication(diff, diff);
 
 		// Create a graph to compute all operations
-		Graph graph = new Graph(loss, new Adam(0.01, 0.9, 0.999));
+		Graph graph = new Graph(loss, new Adam(0.0001, 0.9, 0.999));
 
 		System.out.println(graph.paramsCount());
 		System.out.println(graph.operationsCount());

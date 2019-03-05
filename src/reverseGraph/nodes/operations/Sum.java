@@ -7,7 +7,7 @@ public class Sum extends Operation {
 	private final Node[] addends;
 
 	public Sum(Node... addends) {
-		this.addends = addends;
+		this.addends = addends.clone();
 	}
 
 	@Override

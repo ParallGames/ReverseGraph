@@ -23,6 +23,8 @@ public class Graph {
 
 	private int exemplesCount = 0;
 
+	private double l1 = 0;
+
 	/**
 	 * Constructs a graph to compute an operation and its dependencies
 	 * 
@@ -108,7 +110,7 @@ public class Graph {
 		for (int i = 0; i < params.length; i++) {
 			Param p = params[i];
 
-			double gradient = derivatives[i] / exemplesCount;
+			double gradient = derivatives[i] / exemplesCount + l1 * p.getValue();
 
 			p.update(-optimizers[i].computeUpdate(gradient));
 
@@ -170,5 +172,9 @@ public class Graph {
 
 	public int paramsCount() {
 		return params.length;
+	}
+
+	public void setL1Regularization(double l1) {
+		this.l1 = l1;
 	}
 }
