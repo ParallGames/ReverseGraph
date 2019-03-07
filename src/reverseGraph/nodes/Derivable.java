@@ -1,17 +1,31 @@
 package reverseGraph.nodes;
 
 public abstract class Derivable extends Node {
-	protected double derivative = 0;
+	private final double[] derivatives;
 
-	public void resetDerivative() {
-		derivative = 0;
+	public Derivable(int outSize) {
+		super(outSize);
+		derivatives = new double[outSize];
 	}
 
-	public void addToDerivative(double value) {
-		derivative += value;
+	public Derivable(double[] initialValues) {
+		super(initialValues);
+		derivatives = new double[initialValues.length];
 	}
 
-	public double getDerivative() {
-		return derivative;
+	public void resetDerivatives() {
+		for (int i = 0; i < getSize(); i++) {
+			derivatives[i] = 0;
+		}
+	}
+
+	public void addToDerivatives(double[] values) {
+		for (int i = 0; i < getSize(); i++) {
+			derivatives[i] += values[i];
+		}
+	}
+
+	public double[] getDerivatives() {
+		return derivatives;
 	}
 }

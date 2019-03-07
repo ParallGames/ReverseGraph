@@ -14,7 +14,7 @@ public class MinimizeXSquare {
 	public static void main(String[] args) {
 
 		// Create a parameter and set its value to 5
-		Param x = new Param(5);
+		Param x = new Param(new double[] { 5 });
 
 		// Create an operation that squares that parameter
 		Operation square = new Multiplication(x, x);
@@ -36,8 +36,8 @@ public class MinimizeXSquare {
 			graph.minimize();
 
 			// Print the parameter and function output values
-			System.out.println("X value : " + x.getValue());
-			System.out.println("Function output : " + square.getValue());
+			System.out.println("X value : " + x);
+			System.out.println("Function output : " + square);
 			System.out.println();
 		}
 	}

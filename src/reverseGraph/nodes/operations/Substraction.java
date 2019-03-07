@@ -8,13 +8,17 @@ public class Substraction extends Operation {
 	private final Node substraend;
 
 	public Substraction(Node minuend, Node substraend) {
+		super(minuend.getSize());
+
 		this.minuend = minuend;
 		this.substraend = substraend;
 	}
 
 	@Override
 	public void compute() {
-		this.output = minuend.getValue() - substraend.getValue();
+		for (int i = 0; i < getSize(); i++) {
+			outputs[i] = minuend.getValues()[i] - substraend.getValues()[i];
+		}
 	}
 
 	@Override
@@ -23,13 +27,25 @@ public class Substraction extends Operation {
 	}
 
 	@Override
-	public void computeDependenciesDerivative() {
+	public void computeDependenciesDerivatives() {
 		if (minuend instanceof Derivable) {
-			((Derivable) minuend).addToDerivative(derivative);
+			double[] derivatives = new double[getSize()];
+
+			for (int i = 0; i < getSize(); i++) {
+				derivatives[i] = this.getDerivatives()[i];
+			}
+
+			((Derivable) minuend).addToDerivatives(derivatives);
 		}
 
 		if (substraend instanceof Derivable) {
-			((Derivable) substraend).addToDerivative(-derivative);
+			double[] derivatives = new double[getSize()];
+
+			for (int i = 0; i < getSize(); i++) {
+				derivatives[i] = -this.getDerivatives()[i];
+			}
+
+			((Derivable) minuend).addToDerivatives(derivatives);
 		}
 	}
 }

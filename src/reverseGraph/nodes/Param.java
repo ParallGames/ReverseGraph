@@ -1,19 +1,23 @@
 package reverseGraph.nodes;
 
-public class Param extends Derivable {
-	public Param() {
-		this(0);
+public final class Param extends Derivable {
+	public Param(int outSize) {
+		super(outSize);
 	}
 
-	public Param(double initialValue) {
-		output = initialValue;
+	public Param(double[] initialValues) {
+		super(initialValues);
 	}
 
-	public void setValue(double value) {
-		output = value;
+	public void setValues(double[] values) {
+		for (int i = 0; i < getSize(); i++) {
+			outputs[i] = values[i];
+		}
 	}
 
-	public void update(double value) {
-		output += value;
+	public void update(double[] updates) {
+		for (int i = 0; i < getSize(); i++) {
+			outputs[i] += updates[i];
+		}
 	}
 }

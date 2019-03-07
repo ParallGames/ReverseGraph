@@ -8,13 +8,17 @@ public class Division extends Operation {
 	private final Node divisor;
 
 	public Division(Node dividend, Node divisor) {
+		super(dividend.getSize());
+
 		this.dividend = dividend;
 		this.divisor = divisor;
 	}
 
 	@Override
 	public void compute() {
-		this.output = dividend.getValue() / divisor.getValue();
+		for (int i = 0; i < getSize(); i++) {
+			outputs[i] = dividend.getValues()[i] / divisor.getValues()[i];
+		}
 	}
 
 	@Override
@@ -23,14 +27,26 @@ public class Division extends Operation {
 	}
 
 	@Override
-	public void computeDependenciesDerivative() {
+	public void computeDependenciesDerivatives() {
 		if (dividend instanceof Derivable) {
-			((Derivable) dividend).addToDerivative(derivative / divisor.getValue());
+			double[] derivatives = new double[getSize()];
+
+			for (int i = 0; i < getSize(); i++) {
+				derivatives[i] = this.getDerivatives()[i] / divisor.getValues()[i];
+			}
+
+			((Derivable) dividend).addToDerivatives(derivatives);
 		}
 
 		if (divisor instanceof Derivable) {
-			((Derivable) divisor)
-					.addToDerivative(-derivative * dividend.getValue() / (divisor.getValue() * divisor.getValue()));
+			double[] derivatives = new double[getSize()];
+
+			for (int i = 0; i < getSize(); i++) {
+				derivatives[i] = -this.getDerivatives()[i] * dividend.getValues()[i]
+						/ (divisor.getValues()[i] * divisor.getValues()[i]);
+			}
+
+			((Derivable) divisor).addToDerivatives(derivatives);
 		}
 	}
 }

@@ -7,7 +7,8 @@ public class Sum extends Operation {
 	private final Node[] addends;
 
 	public Sum(Node... addends) {
-		this.addends = addends.clone();
+		super(1);
+		this.addends = addends;
 	}
 
 	@Override
@@ -15,10 +16,12 @@ public class Sum extends Operation {
 		double output = 0;
 
 		for (Node node : addends) {
-			output += node.getValue();
+			for (double value : node.getValues()) {
+				output += value;
+			}
 		}
 
-		this.output = output;
+		outputs[0] = output;
 	}
 
 	@Override
@@ -27,10 +30,16 @@ public class Sum extends Operation {
 	}
 
 	@Override
-	public void computeDependenciesDerivative() {
+	public void computeDependenciesDerivatives() {
 		for (Node node : addends) {
 			if (node instanceof Derivable) {
-				((Derivable) node).addToDerivative(derivative);
+				double[] derivatives = new double[node.getSize()];
+
+				for (int i = 0; i < derivatives.length; i++) {
+					derivatives[i] = this.getDerivatives()[0];
+				}
+
+				((Derivable) node).addToDerivatives(derivatives);
 			}
 		}
 	}

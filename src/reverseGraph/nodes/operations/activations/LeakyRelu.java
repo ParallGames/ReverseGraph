@@ -8,12 +8,16 @@ public class LeakyRelu extends Operation {
 	private final Node input;
 
 	public LeakyRelu(Node input) {
+		super(input.getSize());
 		this.input = input;
 	}
 
 	@Override
 	public void compute() {
-		this.output = (input.getValue() > 0) ? input.getValue() : input.getValue() * 0.01;
+		for (int i = 0; i < getSize(); i++) {
+			double input = this.input.getValues()[i];
+			outputs[i] = input > 0D ? input : input * 0.01;
+		}
 	}
 
 	@Override
@@ -22,11 +26,16 @@ public class LeakyRelu extends Operation {
 	}
 
 	@Override
-	public void computeDependenciesDerivative() {
+	public void computeDependenciesDerivatives() {
 		if (input instanceof Derivable) {
-			double result = (input.getValue() > 0) ? 1 : 0.01;
+			double[] derivatives = new double[getSize()];
 
-			((Derivable) input).addToDerivative(result * this.derivative);
+			for (int i = 0; i < getSize(); i++) {
+				double result = (input.getValues()[i] > 0) ? 1 : 0.01;
+				derivatives[i] = result * getDerivatives()[i];
+			}
+
+			((Derivable) input).addToDerivatives(derivatives);
 		}
 	}
 }

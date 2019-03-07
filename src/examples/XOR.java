@@ -16,12 +16,12 @@ import vnl.model.LayerModel;
 public class XOR {
 	public static void main(String[] args) {
 		// Net inputs
-		Input input1 = new Input();
-		Input input2 = new Input();
+		Input input1 = new Input(1);
+		Input input2 = new Input(1);
 
 		// Create net model
 		LayerModel[] layers = new LayerModel[3];
-		layers[0] = new LayerModel(10000, Activation.LEAKYRELU);
+		layers[0] = new LayerModel(100, Activation.LEAKYRELU);
 		layers[1] = new LayerModel(100, Activation.LEAKYRELU);
 		layers[2] = new LayerModel(1, Activation.TANH);
 
@@ -29,7 +29,7 @@ public class XOR {
 		Operation output = Network.createNetwork(new Input[] { input1, input2 }, layers)[0];
 
 		// Net label (the desired output)
-		Input label = new Input();
+		Input label = new Input(1);
 
 		// Add operation to compute the difference between the current and the desired
 		// output
@@ -48,52 +48,52 @@ public class XOR {
 			errorSum = 0;
 
 			// Set input for 0 XOR 0 = 0
-			input1.setValue(-1);
-			input2.setValue(-1);
-			label.setValue(-1);
+			input1.setValues(new double[] { -1 });
+			input2.setValues(new double[] { -1 });
+			label.setValues(new double[] { -1 });
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getValue();
+			errorSum += loss.getValues()[0];
 
 			// Learn the current input
 			graph.computeDerivatives();
 			graph.minimize();
 
 			// Set input for 1 XOR 0 = 1
-			input1.setValue(1);
-			input2.setValue(-1);
-			label.setValue(1);
+			input1.setValues(new double[] { 1 });
+			input2.setValues(new double[] { -1 });
+			label.setValues(new double[] { 1 });
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getValue();
+			errorSum += loss.getValues()[0];
 
 			// Learn the current input
 			graph.computeDerivatives();
 			graph.minimize();
 
 			// Set input for 0 XOR 1 = 1
-			input1.setValue(-1);
-			input2.setValue(1);
-			label.setValue(1);
+			input1.setValues(new double[] { -1 });
+			input2.setValues(new double[] { 1 });
+			label.setValues(new double[] { 1 });
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getValue();
+			errorSum += loss.getValues()[0];
 
 			// Learn the current input
 			graph.computeDerivatives();
 			graph.minimize();
 
 			// Set input for 1 XOR 1 = 0
-			input1.setValue(1);
-			input2.setValue(1);
-			label.setValue(-1);
+			input1.setValues(new double[] { 1 });
+			input2.setValues(new double[] { 1 });
+			label.setValues(new double[] { -1 });
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getValue();
+			errorSum += loss.getValues()[0];
 
 			// Learn the current input
 			graph.computeDerivatives();

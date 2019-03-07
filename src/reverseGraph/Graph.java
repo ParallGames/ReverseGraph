@@ -44,9 +44,15 @@ public class Graph {
 		operationsList.clear();
 		operationsSet.clear();
 
-		derivatives = new double[params.length];
+		int paramsCount = 0;
 
-		optimizers = new Optimizer[params.length];
+		for (Param p : params) {
+			paramsCount += p.getSize();
+		}
+
+		derivatives = new double[paramsCount];
+
+		optimizers = new Optimizer[paramsCount];
 
 		for (int i = 0; i < optimizers.length; i++) {
 			optimizers[i] = optimizer.copy();
@@ -79,21 +85,25 @@ public class Graph {
 	 */
 	public void computeDerivatives() {
 		for (Operation op : operations) {
-			op.resetDerivative();
+			op.resetDerivatives();
 		}
 
 		for (Param p : params) {
-			p.resetDerivative();
+			p.resetDerivatives();
 		}
 
-		operations[operations.length - 1].addToDerivative(1);
+		operations[operations.length - 1].addToDerivatives(new double[] { 1 });
 
 		for (int i = operations.length - 1; i >= 0; i--) {
-			operations[i].computeDependenciesDerivative();
+			operations[i].computeDependenciesDerivatives();
 		}
 
+		int index = 0;
 		for (int i = 0; i < params.length; i++) {
-			derivatives[i] += params[i].getDerivative();
+			for (int a = 0; a < params[i].getSize(); a++) {
+				derivatives[index] += params[i].getDerivatives()[a];
+				index++;
+			}
 		}
 
 		exemplesCount++;
@@ -107,14 +117,23 @@ public class Graph {
 			return;
 		}
 
+		int index = 0;
+
 		for (int i = 0; i < params.length; i++) {
 			Param p = params[i];
+			double[] updates = new double[p.getSize()];
 
-			double gradient = derivatives[i] / exemplesCount + l1 * p.getValue();
+			for (int a = 0; a < p.getSize(); a++) {
+				double gradient = derivatives[index] / exemplesCount + l1 * p.getValues()[a];
 
-			p.update(-optimizers[i].computeUpdate(gradient));
+				updates[a] = -optimizers[index].computeUpdate(gradient);
 
-			derivatives[i] = 0;
+				derivatives[index] = 0;
+
+				index++;
+			}
+
+			p.update(updates);
 		}
 
 		exemplesCount = 0;

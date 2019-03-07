@@ -1,15 +1,17 @@
 package reverseGraph.nodes;
 
-public class Input extends Node {
-	public Input() {
-		this(0);
+public final class Input extends Node {
+	public Input(int outSize) {
+		super(outSize);
 	}
 
-	public Input(double initialValue) {
-		this.output = initialValue;
+	public Input(double[] initialValues) {
+		super(initialValues);
 	}
 
-	public void setValue(double value) {
-		output = value;
+	public void setValues(double[] values) {
+		for (int i = 0; i < getSize(); i++) {
+			outputs[i] = values[i];
+		}
 	}
 }

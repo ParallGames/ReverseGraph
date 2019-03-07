@@ -8,12 +8,15 @@ public class Sigmoid extends Operation {
 	private final Node input;
 
 	public Sigmoid(Node input) {
+		super(input.getSize());
 		this.input = input;
 	}
 
 	@Override
 	public void compute() {
-		this.output = 1D / (1D + Math.exp(-input.getValue()));
+		for (int i = 0; i < getSize(); i++) {
+			outputs[i] = 1D / (1D + Math.exp(-input.getValues()[i]));
+		}
 	}
 
 	@Override
@@ -22,16 +25,22 @@ public class Sigmoid extends Operation {
 	}
 
 	@Override
-	public void computeDependenciesDerivative() {
+	public void computeDependenciesDerivatives() {
 		if (input instanceof Derivable) {
-			double exp = Math.exp(input.getValue());
+			double[] derivatives = new double[getSize()];
 
-			double divider = exp + 1;
-			divider *= divider;
+			for (int i = 0; i < getSize(); i++) {
+				double exp = Math.exp(input.getValues()[i]);
 
-			double result = exp / divider;
+				double divider = exp + 1;
+				divider *= divider;
 
-			((Derivable) input).addToDerivative(result * this.derivative);
+				double result = exp / divider;
+
+				derivatives[i] = result * getDerivatives()[i];
+			}
+
+			((Derivable) input).addToDerivatives(derivatives);
 		}
 	}
 }

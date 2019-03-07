@@ -10,7 +10,6 @@ import reverseGraph.nodes.operations.Operation;
 import reverseGraph.nodes.operations.Sum;
 import reverseGraph.nodes.operations.activations.LeakyRelu;
 import reverseGraph.nodes.operations.activations.Sigmoid;
-import reverseGraph.nodes.operations.activations.SoftPlus;
 import reverseGraph.nodes.operations.activations.Tanh;
 import vnl.model.LayerModel;
 
@@ -21,10 +20,11 @@ public class Network {
 		Node[] muls = new Node[inputs.length + 1];
 
 		for (int i = 0; i < inputs.length; i++) {
-			muls[i] = new Multiplication(new Param(rand.nextGaussian() * 2 / (inputs.length + outputSize)), inputs[i]);
+			muls[i] = new Multiplication(
+					new Param(new double[] { rand.nextGaussian() * 2 / (inputs.length + outputSize) }), inputs[i]);
 		}
 
-		muls[inputs.length] = new Param();
+		muls[inputs.length] = new Param(1);
 
 		Sum sum = new Sum(muls);
 
@@ -38,8 +38,6 @@ public class Network {
 			return new Sigmoid(sum);
 		case TANH:
 			return new Tanh(sum);
-		case SOFTPLUS:
-			return new SoftPlus(sum);
 		}
 
 		throw new RuntimeException("Unknown activation");

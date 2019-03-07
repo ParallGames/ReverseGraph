@@ -8,13 +8,17 @@ public class Multiplication extends Operation {
 	private final Node factor2;
 
 	public Multiplication(Node factor1, Node factor2) {
+		super(factor1.getSize());
+
 		this.factor1 = factor1;
 		this.factor2 = factor2;
 	}
 
 	@Override
 	public void compute() {
-		this.output = factor1.getValue() * factor2.getValue();
+		for (int i = 0; i < getSize(); i++) {
+			outputs[i] = factor1.getValues()[i] * factor2.getValues()[i];
+		}
 	}
 
 	@Override
@@ -23,13 +27,25 @@ public class Multiplication extends Operation {
 	}
 
 	@Override
-	public void computeDependenciesDerivative() {
+	public void computeDependenciesDerivatives() {
 		if (factor1 instanceof Derivable) {
-			((Derivable) factor1).addToDerivative(derivative * factor2.getValue());
+			double[] derivatives = new double[getSize()];
+
+			for (int i = 0; i < getSize(); i++) {
+				derivatives[i] = this.getDerivatives()[i] * factor2.getValues()[i];
+			}
+
+			((Derivable) factor1).addToDerivatives(derivatives);
 		}
 
 		if (factor2 instanceof Derivable) {
-			((Derivable) factor2).addToDerivative(derivative * factor1.getValue());
+			double[] derivatives = new double[getSize()];
+
+			for (int i = 0; i < getSize(); i++) {
+				derivatives[i] = this.getDerivatives()[i] * factor1.getValues()[i];
+			}
+
+			((Derivable) factor2).addToDerivatives(derivatives);
 		}
 	}
 }

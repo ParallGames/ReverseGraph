@@ -1,7 +1,7 @@
 package reverseGraph.nodes;
 
-public class Constant extends Node {
-	public Constant(double value) {
-		this.output = value;
+public final class Constant extends Node {
+	public Constant(double[] values) {
+		super(values);
 	}
 }
