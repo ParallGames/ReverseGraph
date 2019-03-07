@@ -16,17 +16,15 @@ import vnl.model.LayerModel;
 public class XOR {
 	public static void main(String[] args) {
 		// Net inputs
-		Input input1 = new Input(1);
-		Input input2 = new Input(1);
+		Input inputs = new Input(2);
 
 		// Create net model
-		LayerModel[] layers = new LayerModel[3];
-		layers[0] = new LayerModel(100, Activation.LEAKYRELU);
-		layers[1] = new LayerModel(100, Activation.LEAKYRELU);
-		layers[2] = new LayerModel(1, Activation.TANH);
+		LayerModel[] layers = new LayerModel[2];
+		layers[0] = new LayerModel(10, Activation.LEAKYRELU);
+		layers[1] = new LayerModel(1, Activation.TANH);
 
 		// Create net
-		Operation output = Network.createNetwork(new Input[] { input1, input2 }, layers)[0];
+		Operation output = Network.createNetwork(inputs, layers);
 
 		// Net label (the desired output)
 		Input label = new Input(1);
@@ -37,7 +35,7 @@ public class XOR {
 		Multiplication loss = new Multiplication(diff, diff);
 
 		// Create a graph to compute all operations
-		Graph graph = new Graph(loss, new Adam(0.0001, 0.9, 0.999));
+		Graph graph = new Graph(loss, new Adam(0.01, 0.9, 0.999));
 
 		System.out.println(graph.paramsCount());
 		System.out.println(graph.operationsCount());
@@ -48,8 +46,7 @@ public class XOR {
 			errorSum = 0;
 
 			// Set input for 0 XOR 0 = 0
-			input1.setValues(new double[] { -1 });
-			input2.setValues(new double[] { -1 });
+			inputs.setValues(new double[] { -1, -1 });
 			label.setValues(new double[] { -1 });
 
 			// Compute net output
@@ -61,8 +58,7 @@ public class XOR {
 			graph.minimize();
 
 			// Set input for 1 XOR 0 = 1
-			input1.setValues(new double[] { 1 });
-			input2.setValues(new double[] { -1 });
+			inputs.setValues(new double[] { 1, -1 });
 			label.setValues(new double[] { 1 });
 
 			// Compute net output
@@ -74,8 +70,7 @@ public class XOR {
 			graph.minimize();
 
 			// Set input for 0 XOR 1 = 1
-			input1.setValues(new double[] { -1 });
-			input2.setValues(new double[] { 1 });
+			inputs.setValues(new double[] { -1, 1 });
 			label.setValues(new double[] { 1 });
 
 			// Compute net output
@@ -87,8 +82,7 @@ public class XOR {
 			graph.minimize();
 
 			// Set input for 1 XOR 1 = 0
-			input1.setValues(new double[] { 1 });
-			input2.setValues(new double[] { 1 });
+			inputs.setValues(new double[] { 1, 1 });
 			label.setValues(new double[] { -1 });
 
 			// Compute net output
