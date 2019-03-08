@@ -1,5 +1,6 @@
 package reverseGraph.nodes.operations;
 
+import reverseGraph.DifferentSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
@@ -9,6 +10,10 @@ public class Division extends Operation {
 
 	public Division(Node dividend, Node divisor) {
 		super(dividend.getSize());
+
+		if (dividend.getSize() != divisor.getSize()) {
+			throw new DifferentSizeException(dividend.getSize(), divisor.getSize());
+		}
 
 		this.dividend = dividend;
 		this.divisor = divisor;

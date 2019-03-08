@@ -1,5 +1,6 @@
 package reverseGraph.nodes.operations;
 
+import reverseGraph.DifferentSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
@@ -9,6 +10,10 @@ public class Addition extends Operation {
 
 	public Addition(Node addend1, Node addend2) {
 		super(addend1.getSize());
+
+		if (addend1.getSize() != addend2.getSize()) {
+			throw new DifferentSizeException(addend1.getSize(), addend2.getSize());
+		}
 
 		this.addend1 = addend1;
 		this.addend2 = addend2;
@@ -23,7 +28,7 @@ public class Addition extends Operation {
 
 	@Override
 	public Node[] getDependencies() {
-		return new Node[] { addend1, addend2};
+		return new Node[] { addend1, addend2 };
 	}
 
 	@Override

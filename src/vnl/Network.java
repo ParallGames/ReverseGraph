@@ -5,8 +5,9 @@ import java.util.Random;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.Param;
 import reverseGraph.nodes.operations.Addition;
-import reverseGraph.nodes.operations.Aggregator;
+import reverseGraph.nodes.operations.Concatenate;
 import reverseGraph.nodes.operations.Division;
+import reverseGraph.nodes.operations.Expander;
 import reverseGraph.nodes.operations.Multiplication;
 import reverseGraph.nodes.operations.Operation;
 import reverseGraph.nodes.operations.Sum;
@@ -20,13 +21,13 @@ public class Network {
 
 	private static Operation createNeuron(Node inputs, int outputSize) {
 		double[] initialValues = new double[inputs.getSize()];
-		
+
 		for (int i = 0; i < inputs.getSize(); i++) {
 			initialValues[i] = rand.nextGaussian() * 2 / (inputs.getSize() + outputSize);
 		}
-		
+
 		Param weights = new Param(initialValues);
-		
+
 		Node muls = new Multiplication(inputs, weights);
 
 		return new Sum(muls);
@@ -38,8 +39,8 @@ public class Network {
 		for (int i = 0; i < outputSize; i++) {
 			outputs[i] = createNeuron(inputs, outputSize);
 		}
-		
-		Operation output = new Addition(new Aggregator(outputs), new Param(outputSize));
+
+		Operation output = new Addition(new Concatenate(outputs), new Param(outputSize));
 
 		switch (activation) {
 		case IDENTITY:
@@ -53,7 +54,7 @@ public class Network {
 		case SOFTMAX:
 			output = new Sigmoid(output);
 
-			return new Division(output, new Sum(output));
+			return new Division(output, new Expander(new Sum(output), outputSize));
 		default:
 			throw new RuntimeException("Unknown activation");
 		}

@@ -1,5 +1,6 @@
 package reverseGraph.nodes.operations;
 
+import reverseGraph.DifferentSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
@@ -9,6 +10,10 @@ public class Substraction extends Operation {
 
 	public Substraction(Node minuend, Node substraend) {
 		super(minuend.getSize());
+
+		if (minuend.getSize() != substraend.getSize()) {
+			throw new DifferentSizeException(minuend.getSize(), substraend.getSize());
+		}
 
 		this.minuend = minuend;
 		this.substraend = substraend;
