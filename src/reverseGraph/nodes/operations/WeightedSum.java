@@ -1,5 +1,6 @@
 package reverseGraph.nodes.operations;
 
+import reverseGraph.DifferentSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
@@ -10,6 +11,10 @@ public class WeightedSum extends Operation {
 
 	public WeightedSum(Node addends, Node weights) {
 		super(1);
+
+		if (addends.getSize() != weights.getSize()) {
+			throw new DifferentSizeException(addends.getSize(), weights.getSize());
+		}
 
 		this.addends = addends;
 		this.weights = weights;
