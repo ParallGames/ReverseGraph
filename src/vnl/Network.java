@@ -8,9 +8,9 @@ import reverseGraph.nodes.operations.Addition;
 import reverseGraph.nodes.operations.Concatenate;
 import reverseGraph.nodes.operations.Division;
 import reverseGraph.nodes.operations.Expander;
-import reverseGraph.nodes.operations.Multiplication;
 import reverseGraph.nodes.operations.Operation;
 import reverseGraph.nodes.operations.Sum;
+import reverseGraph.nodes.operations.WeightedSum;
 import reverseGraph.nodes.operations.activations.LeakyRelu;
 import reverseGraph.nodes.operations.activations.Sigmoid;
 import reverseGraph.nodes.operations.activations.Tanh;
@@ -26,11 +26,8 @@ public class Network {
 			initialValues[i] = rand.nextGaussian() * 2 / (inputs.getSize() + outputSize);
 		}
 
-		Param weights = new Param(initialValues);
-
-		Node muls = new Multiplication(inputs, weights);
-
-		return new Sum(muls);
+		// Multiply inputs by weights and return the sum
+		return new WeightedSum(inputs, new Param(initialValues));
 	}
 
 	private static Operation createLayer(Node inputs, int outputSize, Activation activation) {
@@ -40,8 +37,10 @@ public class Network {
 			outputs[i] = createNeuron(inputs, outputSize);
 		}
 
+		// Add thresholds to all outputs
 		Operation output = new Addition(new Concatenate(outputs), new Param(outputSize));
 
+		// Apply an activation
 		switch (activation) {
 		case IDENTITY:
 			return output;

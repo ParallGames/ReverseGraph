@@ -33,16 +33,16 @@ public class Graph {
 	 */
 	public Graph(Operation operation, Optimizer optimizer) {
 		findDependentNodes(operation);
+		paramsSet.clear();
+		operationsSet.clear();
 
 		sortOperations();
 
 		params = paramsList.toArray(new Param[0]);
 		paramsList.clear();
-		paramsSet.clear();
 
 		operations = operationsList.toArray(new Operation[0]);
 		operationsList.clear();
-		operationsSet.clear();
 
 		int paramsCount = 0;
 
@@ -160,24 +160,20 @@ public class Graph {
 		final HashSet<Operation> sortedOperationsSet = new HashSet<>();
 
 		while (!operationsList.isEmpty()) {
-			for (int i = operationsList.size() - 1; i >= 0; i--) {
+			operationLoop: for (int i = operationsList.size() - 1; i >= 0; i--) {
 				Operation op = operationsList.get(i);
-
-				boolean canCompute = true;
 
 				for (Node n : op.getDependencies()) {
 					if (n instanceof Operation && !sortedOperationsSet.contains(n)) {
-						canCompute = false;
-						break;
+						continue operationLoop;
 					}
 				}
 
-				if (canCompute) {
-					operationsList.remove(i);
+				operationsList.remove(i);
 
-					sortedOperations.add(op);
-					sortedOperationsSet.add(op);
-				}
+				sortedOperations.add(op);
+				sortedOperationsSet.add(op);
+
 			}
 		}
 
