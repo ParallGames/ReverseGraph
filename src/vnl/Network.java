@@ -4,13 +4,11 @@ import java.util.Random;
 
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.Param;
-import reverseGraph.nodes.operations.Addition;
-import reverseGraph.nodes.operations.Concatenate;
 import reverseGraph.nodes.operations.Division;
 import reverseGraph.nodes.operations.Expander;
+import reverseGraph.nodes.operations.Layer;
 import reverseGraph.nodes.operations.Operation;
 import reverseGraph.nodes.operations.Sum;
-import reverseGraph.nodes.operations.WeightedSum;
 import reverseGraph.nodes.operations.activations.LeakyRelu;
 import reverseGraph.nodes.operations.activations.Sigmoid;
 import reverseGraph.nodes.operations.activations.Tanh;
@@ -19,26 +17,14 @@ import vnl.model.LayerModel;
 public class Network {
 	private static final Random rand = new Random();
 
-	private static Operation createNeuron(Node inputs, int outputSize) {
-		double[] initialValues = new double[inputs.getSize()];
-
-		for (int i = 0; i < inputs.getSize(); i++) {
-			initialValues[i] = rand.nextGaussian() * 2 / (inputs.getSize() + outputSize);
-		}
-
-		// Multiply inputs by weights and return the sum
-		return new WeightedSum(inputs, new Param(initialValues));
-	}
-
 	private static Operation createLayer(Node inputs, int outputSize, Activation activation) {
-		Operation[] outputs = new Operation[outputSize];
+		double[] initialWeights = new double[inputs.getSize() * outputSize];
 
-		for (int i = 0; i < outputSize; i++) {
-			outputs[i] = createNeuron(inputs, outputSize);
+		for (int i = 0; i < initialWeights.length; i++) {
+			initialWeights[i] = rand.nextGaussian() * 2 / (inputs.getSize() + outputSize);
 		}
 
-		// Add thresholds to all outputs
-		Operation output = new Addition(new Concatenate(outputs), new Param(outputSize));
+		Operation output = new Layer(inputs, new Param(initialWeights), new Param(outputSize));
 
 		// Apply an activation
 		switch (activation) {
