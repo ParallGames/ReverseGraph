@@ -21,7 +21,8 @@ public class Addition extends Operation {
 
 	@Override
 	public void compute() {
-		for (int i = 0; i < getSize(); i++) {
+		final int size = getSize();
+		for (int i = 0; i < size; i++) {
 			outputs[i] = addend1.getValues()[i] + addend2.getValues()[i];
 		}
 	}

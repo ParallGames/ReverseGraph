@@ -16,7 +16,7 @@ public final class Param extends Derivable {
 			throw new WrongSizeException(values.length, getSize());
 		}
 
-		for (int i = 0; i < getSize(); i++) {
+		for (int i = 0; i < values.length; i++) {
 			outputs[i] = values[i];
 		}
 	}
@@ -26,7 +26,7 @@ public final class Param extends Derivable {
 			throw new WrongSizeException(updates.length, getSize());
 		}
 
-		for (int i = 0; i < getSize(); i++) {
+		for (int i = 0; i < updates.length; i++) {
 			outputs[i] += updates[i];
 		}
 	}

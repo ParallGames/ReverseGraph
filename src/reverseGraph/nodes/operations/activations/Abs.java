@@ -14,7 +14,8 @@ public class Abs extends Operation {
 
 	@Override
 	public void compute() {
-		for (int i = 0; i < getSize(); i++) {
+		final int size = getSize();
+		for (int i = 0; i < size; i++) {
 			double input = this.input.getValues()[i];
 			outputs[i] = input > 0 ? input : -input;
 		}
@@ -28,13 +29,12 @@ public class Abs extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (this.input instanceof Derivable) {
-			double[] derivatives = new double[getSize()];
-			for (int i = 0; i < getSize(); i++) {
+			final int size = getSize();
+			for (int i = 0; i < size; i++) {
 				double input = this.input.getValues()[i];
 				double derivative = getDerivatives()[i];
-				derivatives[i] = input > 0 ? derivative : -derivative;
+				((Derivable) this.input).getDerivatives()[i] += input > 0 ? derivative : -derivative;
 			}
-			((Derivable) this.input).addToDerivatives(derivatives);
 		}
 	}
 }

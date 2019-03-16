@@ -23,11 +23,12 @@ public abstract class Node {
 	public String toString() {
 		String str = "{";
 
-		for (int i = 0; i < getSize() - 1; i++) {
+		final int size = getSize();
+		for (int i = 0; i < size - 1; i++) {
 			str += outputs[i] + ", ";
 		}
 
-		str += outputs[getSize() - 1] + "}";
+		str += outputs[size - 1] + "}";
 
 		return String.valueOf(str);
 	}

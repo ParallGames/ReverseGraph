@@ -33,13 +33,10 @@ public class Sum extends Operation {
 	public void computeDependenciesDerivatives() {
 		for (Node node : addends) {
 			if (node instanceof Derivable) {
-				double[] derivatives = new double[node.getSize()];
-
-				for (int i = 0; i < derivatives.length; i++) {
-					derivatives[i] = this.getDerivatives()[0];
+				final int size = node.getSize();
+				for (int i = 0; i < size; i++) {
+					((Derivable) node).getDerivatives()[i] += this.getDerivatives()[0];
 				}
-
-				((Derivable) node).addToDerivatives(derivatives);
 			}
 		}
 	}

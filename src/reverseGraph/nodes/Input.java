@@ -16,7 +16,8 @@ public final class Input extends Node {
 			throw new WrongSizeException(values.length, getSize());
 		}
 
-		for (int i = 0; i < getSize(); i++) {
+		final int size = getSize();
+		for (int i = 0; i < size; i++) {
 			outputs[i] = values[i];
 		}
 	}

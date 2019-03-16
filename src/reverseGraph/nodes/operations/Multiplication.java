@@ -21,7 +21,8 @@ public class Multiplication extends Operation {
 
 	@Override
 	public void compute() {
-		for (int i = 0; i < getSize(); i++) {
+		final int size = getSize();
+		for (int i = 0; i < size; i++) {
 			outputs[i] = factor1.getValues()[i] * factor2.getValues()[i];
 		}
 	}
@@ -34,23 +35,17 @@ public class Multiplication extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (factor1 instanceof Derivable) {
-			double[] derivatives = new double[getSize()];
-
-			for (int i = 0; i < getSize(); i++) {
-				derivatives[i] = this.getDerivatives()[i] * factor2.getValues()[i];
+			final int size = getSize();
+			for (int i = 0; i < size; i++) {
+				((Derivable) factor1).getDerivatives()[i] += this.getDerivatives()[i] * factor2.getValues()[i];
 			}
-
-			((Derivable) factor1).addToDerivatives(derivatives);
 		}
 
 		if (factor2 instanceof Derivable) {
-			double[] derivatives = new double[getSize()];
-
-			for (int i = 0; i < getSize(); i++) {
-				derivatives[i] = this.getDerivatives()[i] * factor1.getValues()[i];
+			final int size = getSize();
+			for (int i = 0; i < size; i++) {
+				((Derivable) factor2).getDerivatives()[i] += this.getDerivatives()[i] * factor1.getValues()[i];
 			}
-
-			((Derivable) factor2).addToDerivatives(derivatives);
 		}
 	}
 }

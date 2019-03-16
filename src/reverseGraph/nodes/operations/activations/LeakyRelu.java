@@ -14,7 +14,8 @@ public class LeakyRelu extends Operation {
 
 	@Override
 	public void compute() {
-		for (int i = 0; i < getSize(); i++) {
+		final int size = getSize();
+		for (int i = 0; i < size; i++) {
 			double input = this.input.getValues()[i];
 			outputs[i] = input > 0D ? input : input * 0.01;
 		}
@@ -28,14 +29,11 @@ public class LeakyRelu extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (input instanceof Derivable) {
-			double[] derivatives = new double[getSize()];
-
-			for (int i = 0; i < getSize(); i++) {
+			final int size = getSize();
+			for (int i = 0; i < size; i++) {
 				double result = (input.getValues()[i] > 0) ? 1 : 0.01;
-				derivatives[i] = result * getDerivatives()[i];
+				((Derivable) input).getDerivatives()[i] += result * getDerivatives()[i];
 			}
-
-			((Derivable) input).addToDerivatives(derivatives);
 		}
 	}
 }

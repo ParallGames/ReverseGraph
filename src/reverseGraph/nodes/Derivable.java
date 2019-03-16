@@ -16,7 +16,8 @@ public abstract class Derivable extends Node {
 	}
 
 	public void resetDerivatives() {
-		for (int i = 0; i < getSize(); i++) {
+		final int size = getSize();
+		for (int i = 0; i < size; i++) {
 			derivatives[i] = 0;
 		}
 	}
@@ -26,7 +27,7 @@ public abstract class Derivable extends Node {
 			throw new WrongSizeException(values.length, getSize());
 		}
 
-		for (int i = 0; i < getSize(); i++) {
+		for (int i = 0; i < values.length; i++) {
 			derivatives[i] += values[i];
 		}
 	}

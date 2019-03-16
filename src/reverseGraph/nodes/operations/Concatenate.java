@@ -27,7 +27,8 @@ public class Concatenate extends Operation {
 		int index = 0;
 
 		for (int i = 0; i < inputs.length; i++) {
-			for (int a = 0; a < inputs[i].getSize(); a++) {
+			final int size = inputs[i].getSize();
+			for (int a = 0; a < size; a++) {
 				outputs[index] = inputs[i].getValues()[a];
 				index++;
 			}
@@ -45,14 +46,11 @@ public class Concatenate extends Operation {
 		int index = 0;
 		for (int i = 0; i < inputs.length; i++) {
 			if (inputs[i] instanceof Derivable) {
-				double[] derivatives = new double[inputs[i].getSize()];
-
-				for (int a = 0; a < inputs[i].getSize(); a++) {
-					derivatives[a] = getDerivatives()[index];
+				final int size = inputs[i].getSize();
+				for (int a = 0; a < size; a++) {
+					((Derivable) inputs[i]).getDerivatives()[a] += getDerivatives()[index];
 					index++;
 				}
-
-				((Derivable) inputs[i]).addToDerivatives(derivatives);
 			} else {
 				index += inputs[i].getSize();
 			}

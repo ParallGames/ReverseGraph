@@ -1,5 +1,6 @@
 package reverseGraph.nodes.operations;
 
+import reverseGraph.DifferentSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
@@ -11,6 +12,10 @@ public class Layer extends Operation {
 	public Layer(Node inputs, Node weights, Node biases) {
 		super(biases.getSize());
 
+		if (inputs.getSize() * biases.getSize() != weights.getSize()) {
+			throw new DifferentSizeException(weights.getSize(), inputs.getSize() * biases.getSize());
+		}
+
 		this.inputs = inputs;
 		this.weights = weights;
 		this.biases = biases;
@@ -18,10 +23,13 @@ public class Layer extends Operation {
 
 	@Override
 	public void compute() {
-		for (int o = 0; o < getSize(); o++) {
+		final int outputSize = getSize();
+		final int inputSize = inputs.getSize();
+
+		for (int o = 0; o < outputSize; o++) {
 			double sum = biases.getValues()[o];
-			for (int i = 0; i < inputs.getSize(); i++) {
-				sum += inputs.getValues()[i] * weights.getValues()[o * inputs.getSize() + i];
+			for (int i = 0; i < inputSize; i++) {
+				sum += inputs.getValues()[i] * weights.getValues()[o * inputSize + i];
 			}
 			outputs[o] = sum;
 		}
@@ -39,29 +47,26 @@ public class Layer extends Operation {
 		}
 
 		if (weights instanceof Derivable) {
-			double[] derivatives = new double[weights.getSize()];
-
-			for (int o = 0; o < getSize(); o++) {
-				for (int i = 0; i < inputs.getSize(); i++) {
-					derivatives[o * inputs.getSize() + i] = inputs.getValues()[i] * getDerivatives()[o];
+			final int outputSize = getSize();
+			final int inputSize = inputs.getSize();
+			for (int o = 0; o < outputSize; o++) {
+				for (int i = 0; i < inputSize; i++) {
+					((Derivable) weights).getDerivatives()[o * inputSize + i] += inputs.getValues()[i]
+							* getDerivatives()[o];
 				}
 			}
-
-			((Derivable) weights).addToDerivatives(derivatives);
 		}
 
 		if (inputs instanceof Derivable) {
-			double[] derivatives = new double[inputs.getSize()];
-
-			for (int i = 0; i < inputs.getSize(); i++) {
+			final int outputSize = getSize();
+			final int inputSize = inputs.getSize();
+			for (int i = 0; i < inputSize; i++) {
 				double derivative = 0;
-				for (int o = 0; o < getSize(); o++) {
-					derivative += weights.getValues()[o * inputs.getSize() + i] * getDerivatives()[o];
+				for (int o = 0; o < outputSize; o++) {
+					derivative += weights.getValues()[o * inputSize + i] * getDerivatives()[o];
 				}
-				derivatives[i] = derivative;
+				((Derivable) inputs).getDerivatives()[i] += derivative;
 			}
-
-			((Derivable) inputs).addToDerivatives(derivatives);
 		}
 	}
 }

@@ -21,7 +21,8 @@ public class Substraction extends Operation {
 
 	@Override
 	public void compute() {
-		for (int i = 0; i < getSize(); i++) {
+		final int size = getSize();
+		for (int i = 0; i < size; i++) {
 			outputs[i] = minuend.getValues()[i] - substraend.getValues()[i];
 		}
 	}
@@ -34,23 +35,17 @@ public class Substraction extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (minuend instanceof Derivable) {
-			double[] derivatives = new double[getSize()];
-
-			for (int i = 0; i < getSize(); i++) {
-				derivatives[i] = this.getDerivatives()[i];
+			final int size = getSize();
+			for (int i = 0; i < size; i++) {
+				((Derivable) minuend).getDerivatives()[i] += this.getDerivatives()[i];
 			}
-
-			((Derivable) minuend).addToDerivatives(derivatives);
 		}
 
 		if (substraend instanceof Derivable) {
-			double[] derivatives = new double[getSize()];
-
-			for (int i = 0; i < getSize(); i++) {
-				derivatives[i] = -this.getDerivatives()[i];
+			final int size = getSize();
+			for (int i = 0; i < size; i++) {
+				((Derivable) minuend).getDerivatives()[i] -= this.getDerivatives()[i];
 			}
-
-			((Derivable) minuend).addToDerivatives(derivatives);
 		}
 	}
 }

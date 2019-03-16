@@ -19,7 +19,8 @@ public class Expander extends Operation {
 
 	@Override
 	public void compute() {
-		for (int i = 0; i < getSize(); i++) {
+		final int size = getSize();
+		for (int i = 0; i < size; i++) {
 			outputs[i] = input.getValues()[0];
 		}
 	}
@@ -34,10 +35,12 @@ public class Expander extends Operation {
 		if (input instanceof Derivable) {
 			double sum = 0;
 
-			for (int i = 0; i < getSize(); i++) {
+			final int size = getSize();
+			for (int i = 0; i < size; i++) {
 				sum += getDerivatives()[i];
 			}
-			((Derivable) input).addToDerivatives(new double[] { sum });
+
+			((Derivable) input).getDerivatives()[0] += sum;
 		}
 	}
 }

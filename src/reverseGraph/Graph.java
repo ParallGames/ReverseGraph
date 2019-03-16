@@ -100,7 +100,8 @@ public class Graph {
 
 		int index = 0;
 		for (int i = 0; i < params.length; i++) {
-			for (int a = 0; a < params[i].getSize(); a++) {
+			final int size = params[i].getSize();
+			for (int a = 0; a < size; a++) {
 				derivatives[index] += params[i].getDerivatives()[a];
 				index++;
 			}
@@ -121,19 +122,18 @@ public class Graph {
 
 		for (int i = 0; i < params.length; i++) {
 			Param p = params[i];
-			double[] updates = new double[p.getSize()];
 
-			for (int a = 0; a < p.getSize(); a++) {
-				double gradient = derivatives[index] / exemplesCount + l1 * p.getValues()[a];
+			final int size = p.getSize();
 
-				updates[a] = -optimizers[index].computeUpdate(gradient);
+			for (int a = 0; a < size; a++) {
+				double gradient = derivatives[index] /* + l1 * p.getValues()[a] */;
+
+				p.getValues()[a] -= optimizers[index].computeUpdate(gradient);
 
 				derivatives[index] = 0;
 
 				index++;
 			}
-
-			p.update(updates);
 		}
 
 		exemplesCount = 0;

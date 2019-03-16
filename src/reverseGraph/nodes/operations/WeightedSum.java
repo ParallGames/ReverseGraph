@@ -24,7 +24,8 @@ public class WeightedSum extends Operation {
 	public void compute() {
 		double output = 0;
 
-		for (int i = 0; i < addends.getValues().length; i++) {
+		final int size = addends.getSize();
+		for (int i = 0; i < size; i++) {
 			output += addends.getValues()[i] * weights.getValues()[i];
 		}
 
@@ -39,23 +40,17 @@ public class WeightedSum extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (addends instanceof Derivable) {
-			double[] derivatives = new double[addends.getSize()];
-
-			for (int i = 0; i < addends.getSize(); i++) {
-				derivatives[i] = this.getDerivatives()[0] * weights.getValues()[i];
+			final int size = addends.getSize();
+			for (int i = 0; i < size; i++) {
+				((Derivable) addends).getDerivatives()[i] += this.getDerivatives()[0] * weights.getValues()[i];
 			}
-
-			((Derivable) addends).addToDerivatives(derivatives);
 		}
 
 		if (weights instanceof Derivable) {
-			double[] derivatives = new double[weights.getSize()];
-
-			for (int i = 0; i < weights.getSize(); i++) {
-				derivatives[i] = this.getDerivatives()[0] * addends.getValues()[i];
+			final int size = addends.getSize();
+			for (int i = 0; i < size; i++) {
+				((Derivable) weights).getDerivatives()[i] += this.getDerivatives()[0] * addends.getValues()[i];
 			}
-
-			((Derivable) weights).addToDerivatives(derivatives);
 		}
 	}
 
