@@ -1,6 +1,6 @@
 package reverseGraph.optimizers;
 
-public class AdaDelta extends Optimizer {
+public final class AdaDelta extends Optimizer {
 	private static final double DEFAULT_DECAY = 0.9;
 
 	private final double decay;
@@ -30,8 +30,7 @@ public class AdaDelta extends Optimizer {
 	}
 
 	@Override
-	public Optimizer copy() {
+	public AdaDelta copy() {
 		return new AdaDelta(decay);
 	}
-
 }

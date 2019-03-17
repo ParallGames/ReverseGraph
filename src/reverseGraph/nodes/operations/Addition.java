@@ -4,7 +4,7 @@ import reverseGraph.DifferentSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
-public class Addition extends Operation {
+public final class Addition extends Operation {
 	private final Node addend1;
 	private final Node addend2;
 
@@ -23,7 +23,7 @@ public class Addition extends Operation {
 	public void compute() {
 		final int size = getSize();
 		for (int i = 0; i < size; i++) {
-			outputs[i] = addend1.getValues()[i] + addend2.getValues()[i];
+			values[i] = addend1.values[i] + addend2.values[i];
 		}
 	}
 
@@ -35,11 +35,11 @@ public class Addition extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (addend1 instanceof Derivable) {
-			((Derivable) addend1).addToDerivatives(getDerivatives());
+			((Derivable) addend1).addToDerivatives(derivatives);
 		}
 
 		if (addend1 instanceof Derivable) {
-			((Derivable) addend2).addToDerivatives(getDerivatives());
+			((Derivable) addend2).addToDerivatives(derivatives);
 		}
 	}
 }

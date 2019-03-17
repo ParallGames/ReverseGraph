@@ -1,6 +1,6 @@
 package reverseGraph.optimizers;
 
-public class SGD extends Optimizer {
+public final class SGD extends Optimizer {
 	private static final double DEFAULT_LEARNING_RATE = 0.001;
 
 	private final double learningRate;

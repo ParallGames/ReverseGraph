@@ -4,40 +4,40 @@ import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.operations.Operation;
 
-public class Sigmoid extends Operation {
-	private final Node input;
+public final class Sigmoid extends Operation {
+	private final Node inputs;
 
-	public Sigmoid(Node input) {
-		super(input.getSize());
-		this.input = input;
+	public Sigmoid(Node inputs) {
+		super(inputs.getSize());
+		this.inputs = inputs;
 	}
 
 	@Override
 	public void compute() {
 		final int size = getSize();
 		for (int i = 0; i < size; i++) {
-			outputs[i] = 1D / (1D + Math.exp(-input.getValues()[i]));
+			values[i] = 1D / (1D + Math.exp(-inputs.values[i]));
 		}
 	}
 
 	@Override
 	public Node[] getDependencies() {
-		return new Node[] { input };
+		return new Node[] { inputs };
 	}
 
 	@Override
 	public void computeDependenciesDerivatives() {
-		if (input instanceof Derivable) {
+		if (inputs instanceof Derivable) {
 			final int size = getSize();
 			for (int i = 0; i < size; i++) {
-				double exp = Math.exp(input.getValues()[i]);
+				double exp = Math.exp(inputs.values[i]);
 
 				double divider = exp + 1;
 				divider *= divider;
 
 				double result = exp / divider;
 
-				((Derivable) input).getDerivatives()[i] += result * getDerivatives()[i];
+				((Derivable) inputs).derivatives[i] += result * derivatives[i];
 			}
 		}
 	}

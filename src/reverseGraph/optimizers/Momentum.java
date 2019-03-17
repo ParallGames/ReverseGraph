@@ -1,6 +1,6 @@
 package reverseGraph.optimizers;
 
-public class Momentum extends Optimizer {
+public final class Momentum extends Optimizer {
 	private static final double DEFAULT_RESISTANCE = 0.9;
 	private static final double DEFAULT_LEARNING_RATE = 0.001;
 
@@ -34,7 +34,7 @@ public class Momentum extends Optimizer {
 	}
 
 	@Override
-	public Optimizer copy() {
+	public Momentum copy() {
 		return new Momentum(learningRate, resistance);
 	}
 }

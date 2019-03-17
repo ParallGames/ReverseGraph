@@ -1,6 +1,6 @@
 package reverseGraph.optimizers;
 
-public class RMSprop extends Optimizer {
+public final class RMSprop extends Optimizer {
 	private static final double GRADIENT_RMS_DECAY = 0.9;
 	private static final double DEFAULT_LEARNING_RATE = 0.001;
 
@@ -31,7 +31,7 @@ public class RMSprop extends Optimizer {
 	}
 
 	@Override
-	public Optimizer copy() {
+	public RMSprop copy() {
 		return new RMSprop(learningRate, decay);
 	}
 }

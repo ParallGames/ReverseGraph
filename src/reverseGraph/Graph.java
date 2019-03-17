@@ -8,7 +8,7 @@ import reverseGraph.nodes.Param;
 import reverseGraph.nodes.operations.Operation;
 import reverseGraph.optimizers.Optimizer;
 
-public class Graph {
+public final class Graph {
 	private final Param[] params;
 	private final Operation[] operations;
 
@@ -92,7 +92,7 @@ public class Graph {
 			p.resetDerivatives();
 		}
 
-		operations[operations.length - 1].addToDerivatives(new double[] { 1 });
+		operations[operations.length - 1].derivatives[0] = 1;
 
 		for (int i = operations.length - 1; i >= 0; i--) {
 			operations[i].computeDependenciesDerivatives();
@@ -102,7 +102,7 @@ public class Graph {
 		for (int i = 0; i < params.length; i++) {
 			final int size = params[i].getSize();
 			for (int a = 0; a < size; a++) {
-				derivatives[index] += params[i].getDerivatives()[a];
+				derivatives[index] += params[i].derivatives[a];
 				index++;
 			}
 		}
@@ -126,9 +126,9 @@ public class Graph {
 			final int size = p.getSize();
 
 			for (int a = 0; a < size; a++) {
-				double gradient = derivatives[index] /* + l1 * p.getValues()[a] */;
+				double gradient = derivatives[index] / exemplesCount + l1 * p.values[a];
 
-				p.getValues()[a] -= optimizers[index].computeUpdate(gradient);
+				p.values[a] -= optimizers[index].computeUpdate(gradient);
 
 				derivatives[index] = 0;
 

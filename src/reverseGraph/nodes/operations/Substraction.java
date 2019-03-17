@@ -4,7 +4,7 @@ import reverseGraph.DifferentSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
-public class Substraction extends Operation {
+public final class Substraction extends Operation {
 	private final Node minuend;
 	private final Node substraend;
 
@@ -23,7 +23,7 @@ public class Substraction extends Operation {
 	public void compute() {
 		final int size = getSize();
 		for (int i = 0; i < size; i++) {
-			outputs[i] = minuend.getValues()[i] - substraend.getValues()[i];
+			values[i] = minuend.values[i] - substraend.values[i];
 		}
 	}
 
@@ -37,14 +37,14 @@ public class Substraction extends Operation {
 		if (minuend instanceof Derivable) {
 			final int size = getSize();
 			for (int i = 0; i < size; i++) {
-				((Derivable) minuend).getDerivatives()[i] += this.getDerivatives()[i];
+				((Derivable) minuend).derivatives[i] += derivatives[i];
 			}
 		}
 
 		if (substraend instanceof Derivable) {
 			final int size = getSize();
 			for (int i = 0; i < size; i++) {
-				((Derivable) minuend).getDerivatives()[i] -= this.getDerivatives()[i];
+				((Derivable) minuend).derivatives[i] -= derivatives[i];
 			}
 		}
 	}

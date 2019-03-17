@@ -3,7 +3,7 @@ package reverseGraph.nodes.operations;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
-public class Concatenate extends Operation {
+public final class Concatenate extends Operation {
 	private static int totalSize(Node[] nodes) {
 		int size = 0;
 
@@ -29,7 +29,7 @@ public class Concatenate extends Operation {
 		for (int i = 0; i < inputs.length; i++) {
 			final int size = inputs[i].getSize();
 			for (int a = 0; a < size; a++) {
-				outputs[index] = inputs[i].getValues()[a];
+				values[index] = inputs[i].values[a];
 				index++;
 			}
 		}
@@ -48,7 +48,7 @@ public class Concatenate extends Operation {
 			if (inputs[i] instanceof Derivable) {
 				final int size = inputs[i].getSize();
 				for (int a = 0; a < size; a++) {
-					((Derivable) inputs[i]).getDerivatives()[a] += getDerivatives()[index];
+					((Derivable) inputs[i]).derivatives[a] += derivatives[index];
 					index++;
 				}
 			} else {

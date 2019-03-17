@@ -51,7 +51,7 @@ public class XOR {
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getValues()[0];
+			errorSum += loss.values[0];
 
 			// Learn the current input
 			graph.computeDerivatives();
@@ -63,7 +63,7 @@ public class XOR {
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getValues()[0];
+			errorSum += loss.values[0];
 
 			// Learn the current input
 			graph.computeDerivatives();
@@ -75,7 +75,7 @@ public class XOR {
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getValues()[0];
+			errorSum += loss.values[0];
 
 			// Learn the current input
 			graph.computeDerivatives();
@@ -87,7 +87,7 @@ public class XOR {
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.getValues()[0];
+			errorSum += loss.values[0];
 
 			// Learn the current input
 			graph.computeDerivatives();

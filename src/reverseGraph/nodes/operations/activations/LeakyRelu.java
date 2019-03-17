@@ -4,35 +4,35 @@ import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.operations.Operation;
 
-public class LeakyRelu extends Operation {
-	private final Node input;
+public final class LeakyRelu extends Operation {
+	private final Node inputs;
 
-	public LeakyRelu(Node input) {
-		super(input.getSize());
-		this.input = input;
+	public LeakyRelu(Node inputs) {
+		super(inputs.getSize());
+		this.inputs = inputs;
 	}
 
 	@Override
 	public void compute() {
 		final int size = getSize();
 		for (int i = 0; i < size; i++) {
-			double input = this.input.getValues()[i];
-			outputs[i] = input > 0D ? input : input * 0.01;
+			double input = this.inputs.values[i];
+			values[i] = input > 0D ? input : input * 0.01;
 		}
 	}
 
 	@Override
 	public Node[] getDependencies() {
-		return new Node[] { input };
+		return new Node[] { inputs };
 	}
 
 	@Override
 	public void computeDependenciesDerivatives() {
-		if (input instanceof Derivable) {
+		if (inputs instanceof Derivable) {
 			final int size = getSize();
 			for (int i = 0; i < size; i++) {
-				double result = (input.getValues()[i] > 0) ? 1 : 0.01;
-				((Derivable) input).getDerivatives()[i] += result * getDerivatives()[i];
+				double result = (inputs.values[i] > 0) ? 1 : 0.01;
+				((Derivable) inputs).derivatives[i] += result * derivatives[i];
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 package reverseGraph.optimizers;
 
-public class Adam extends Optimizer {
-
+public final class Adam extends Optimizer {
 	private final double learningRate;
 	private final double firstMomentDecay;
 	private final double secondMomentDecay;
@@ -27,8 +26,7 @@ public class Adam extends Optimizer {
 	}
 
 	@Override
-	public Optimizer copy() {
+	public Adam copy() {
 		return new Adam(learningRate, firstMomentDecay, secondMomentDecay);
 	}
-
 }

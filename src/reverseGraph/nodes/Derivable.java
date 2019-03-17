@@ -3,7 +3,7 @@ package reverseGraph.nodes;
 import reverseGraph.WrongSizeException;
 
 public abstract class Derivable extends Node {
-	private final double[] derivatives;
+	public final double[] derivatives;
 
 	public Derivable(int outSize) {
 		super(outSize);
@@ -30,9 +30,5 @@ public abstract class Derivable extends Node {
 		for (int i = 0; i < values.length; i++) {
 			derivatives[i] += values[i];
 		}
-	}
-
-	public double[] getDerivatives() {
-		return derivatives;
 	}
 }

@@ -17,7 +17,7 @@ public final class Param extends Derivable {
 		}
 
 		for (int i = 0; i < values.length; i++) {
-			outputs[i] = values[i];
+			this.values[i] = values[i];
 		}
 	}
 
@@ -27,7 +27,7 @@ public final class Param extends Derivable {
 		}
 
 		for (int i = 0; i < updates.length; i++) {
-			outputs[i] += updates[i];
+			values[i] += updates[i];
 		}
 	}
 }

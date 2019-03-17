@@ -4,8 +4,8 @@ import reverseGraph.WrongSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
-public class Expander extends Operation {
-	private Node input;
+public final class Expander extends Operation {
+	private final Node input;
 
 	public Expander(Node input, int outSize) {
 		super(outSize);
@@ -21,7 +21,7 @@ public class Expander extends Operation {
 	public void compute() {
 		final int size = getSize();
 		for (int i = 0; i < size; i++) {
-			outputs[i] = input.getValues()[0];
+			values[i] = input.values[0];
 		}
 	}
 
@@ -37,10 +37,10 @@ public class Expander extends Operation {
 
 			final int size = getSize();
 			for (int i = 0; i < size; i++) {
-				sum += getDerivatives()[i];
+				sum += derivatives[i];
 			}
 
-			((Derivable) input).getDerivatives()[0] += sum;
+			((Derivable) input).derivatives[0] += sum;
 		}
 	}
 }

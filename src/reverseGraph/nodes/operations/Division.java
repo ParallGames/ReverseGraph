@@ -4,7 +4,7 @@ import reverseGraph.DifferentSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
-public class Division extends Operation {
+public final class Division extends Operation {
 	private final Node dividend;
 	private final Node divisor;
 
@@ -23,7 +23,7 @@ public class Division extends Operation {
 	public void compute() {
 		final int size = getSize();
 		for (int i = 0; i < size; i++) {
-			outputs[i] = dividend.getValues()[i] / divisor.getValues()[i];
+			values[i] = dividend.values[i] / divisor.values[i];
 		}
 	}
 
@@ -37,15 +37,15 @@ public class Division extends Operation {
 		if (dividend instanceof Derivable) {
 			final int size = getSize();
 			for (int i = 0; i < size; i++) {
-				((Derivable) divisor).getDerivatives()[i] += this.getDerivatives()[i] / divisor.getValues()[i];
+				((Derivable) divisor).derivatives[i] += derivatives[i] / divisor.values[i];
 			}
 		}
 
 		if (divisor instanceof Derivable) {
 			final int size = getSize();
 			for (int i = 0; i < size; i++) {
-				((Derivable) divisor).getDerivatives()[i] -= this.getDerivatives()[i] * dividend.getValues()[i]
-						/ (divisor.getValues()[i] * divisor.getValues()[i]);
+				((Derivable) divisor).derivatives[i] -= derivatives[i] * dividend.values[i]
+						/ (divisor.values[i] * divisor.values[i]);
 			}
 		}
 	}

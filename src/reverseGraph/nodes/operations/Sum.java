@@ -3,7 +3,7 @@ package reverseGraph.nodes.operations;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
-public class Sum extends Operation {
+public final class Sum extends Operation {
 	private final Node[] addends;
 
 	public Sum(Node... addends) {
@@ -16,12 +16,12 @@ public class Sum extends Operation {
 		double output = 0;
 
 		for (Node node : addends) {
-			for (double value : node.getValues()) {
+			for (double value : node.values) {
 				output += value;
 			}
 		}
 
-		outputs[0] = output;
+		values[0] = output;
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class Sum extends Operation {
 			if (node instanceof Derivable) {
 				final int size = node.getSize();
 				for (int i = 0; i < size; i++) {
-					((Derivable) node).getDerivatives()[i] += this.getDerivatives()[0];
+					((Derivable) node).derivatives[i] += derivatives[0];
 				}
 			}
 		}

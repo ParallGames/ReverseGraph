@@ -4,7 +4,7 @@ import reverseGraph.DifferentSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
-public class WeightedSum extends Operation {
+public final class WeightedSum extends Operation {
 
 	private final Node addends;
 	private final Node weights;
@@ -26,10 +26,10 @@ public class WeightedSum extends Operation {
 
 		final int size = addends.getSize();
 		for (int i = 0; i < size; i++) {
-			output += addends.getValues()[i] * weights.getValues()[i];
+			output += addends.values[i] * weights.values[i];
 		}
 
-		outputs[0] = output;
+		values[0] = output;
 	}
 
 	@Override
@@ -42,14 +42,14 @@ public class WeightedSum extends Operation {
 		if (addends instanceof Derivable) {
 			final int size = addends.getSize();
 			for (int i = 0; i < size; i++) {
-				((Derivable) addends).getDerivatives()[i] += this.getDerivatives()[0] * weights.getValues()[i];
+				((Derivable) addends).derivatives[i] += derivatives[0] * weights.values[i];
 			}
 		}
 
 		if (weights instanceof Derivable) {
 			final int size = addends.getSize();
 			for (int i = 0; i < size; i++) {
-				((Derivable) weights).getDerivatives()[i] += this.getDerivatives()[0] * addends.getValues()[i];
+				((Derivable) weights).derivatives[i] += derivatives[0] * addends.values[i];
 			}
 		}
 	}
