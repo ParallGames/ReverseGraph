@@ -7,11 +7,17 @@ public final class RMSprop extends Optimizer {
 	private final double learningRate;
 	private final double decay;
 
-	private double gradientRMS = 0;
+	private final double[] gradientRMS;
 
-	public RMSprop(double learningRate, double decay) {
+	private RMSprop(int size, double learningRate, double decay) {
+		super(size);
 		this.learningRate = learningRate;
 		this.decay = decay;
+		gradientRMS = new double[size];
+	}
+
+	public RMSprop(double learningRate, double decay) {
+		this(0, learningRate, decay);
 	}
 
 	public RMSprop(double learningRate) {
@@ -23,15 +29,15 @@ public final class RMSprop extends Optimizer {
 	}
 
 	@Override
-	public double computeUpdate(double gradient) {
-		gradientRMS *= decay;
-		gradientRMS += gradient * gradient * (1 - decay);
+	public double computeUpdate(int index, double gradient) {
+		gradientRMS[index] *= decay;
+		gradientRMS[index] += gradient * gradient * (1 - decay);
 
-		return learningRate * gradient / Math.sqrt(gradientRMS + 1e-8);
+		return learningRate * gradient / Math.sqrt(gradientRMS[index] + 1e-8);
 	}
 
 	@Override
-	public RMSprop copy() {
-		return new RMSprop(learningRate, decay);
+	public RMSprop copy(int size) {
+		return new RMSprop(size, learningRate, decay);
 	}
 }

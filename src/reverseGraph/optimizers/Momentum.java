@@ -7,11 +7,17 @@ public final class Momentum extends Optimizer {
 	private final double learningRate;
 	private final double resistance;
 
-	private double momentum = 0;
+	private final double[] momentum;
 
-	public Momentum(double learningRate, double resistance) {
+	private Momentum(int size, double learningRate, double resistance) {
+		super(size);
 		this.learningRate = learningRate;
 		this.resistance = resistance;
+		this.momentum = new double[size];
+	}
+
+	public Momentum(double learningRate, double resistance) {
+		this(0, learningRate, resistance);
 	}
 
 	public Momentum(double learningRate) {
@@ -23,18 +29,16 @@ public final class Momentum extends Optimizer {
 	}
 
 	@Override
-	public double computeUpdate(double gradient) {
-		gradient *= learningRate;
+	public double computeUpdate(int index, double gradient) {
+		momentum[index] *= resistance;
 
-		momentum *= resistance;
+		momentum[index] += (1 - resistance) * gradient;
 
-		momentum += (1 - resistance) * gradient;
-
-		return momentum;
+		return momentum[index] * learningRate;
 	}
 
 	@Override
-	public Momentum copy() {
-		return new Momentum(learningRate, resistance);
+	public Momentum copy(int size) {
+		return new Momentum(size, learningRate, resistance);
 	}
 }

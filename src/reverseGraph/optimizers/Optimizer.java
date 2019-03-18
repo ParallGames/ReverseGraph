@@ -1,7 +1,13 @@
 package reverseGraph.optimizers;
 
 public abstract class Optimizer {
-	public abstract double computeUpdate(double gradient);
+	protected final int size;
 
-	public abstract Optimizer copy();
+	public Optimizer(int size) {
+		this.size = size;
+	}
+
+	public abstract double computeUpdate(int index, double gradient);
+
+	public abstract Optimizer copy(int size);
 }

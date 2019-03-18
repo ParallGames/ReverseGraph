@@ -5,8 +5,13 @@ public final class SGD extends Optimizer {
 
 	private final double learningRate;
 
-	public SGD(double learningRate) {
+	private SGD(int size, double learningRate) {
+		super(size);
 		this.learningRate = learningRate;
+	}
+
+	public SGD(double learningRate) {
+		this(0, learningRate);
 	}
 
 	public SGD() {
@@ -14,12 +19,12 @@ public final class SGD extends Optimizer {
 	}
 
 	@Override
-	public double computeUpdate(double gradient) {
+	public double computeUpdate(int index, double gradient) {
 		return gradient * learningRate;
 	}
 
 	@Override
-	public SGD copy() {
-		return new SGD(learningRate);
+	public SGD copy(int size) {
+		return new SGD(size, learningRate);
 	}
 }

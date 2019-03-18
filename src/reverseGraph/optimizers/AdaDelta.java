@@ -5,11 +5,18 @@ public final class AdaDelta extends Optimizer {
 
 	private final double decay;
 
-	private double meanGradient = 0;
-	private double meanUpdate = 0;
+	private final double[] meanGradient;
+	private final double[] meanUpdate;
+
+	private AdaDelta(int size, double decay) {
+		super(size);
+		this.decay = decay;
+		meanGradient = new double[size];
+		meanUpdate = new double[size];
+	}
 
 	public AdaDelta(double decay) {
-		this.decay = decay;
+		this(0, decay);
 	}
 
 	public AdaDelta() {
@@ -17,20 +24,20 @@ public final class AdaDelta extends Optimizer {
 	}
 
 	@Override
-	public double computeUpdate(double gradient) {
-		meanGradient *= decay;
-		meanGradient += (1 - decay) * gradient * gradient;
+	public double computeUpdate(int index, double gradient) {
+		meanGradient[index] *= decay;
+		meanGradient[index] += (1 - decay) * gradient * gradient;
 
-		double update = gradient * Math.sqrt(meanUpdate + 1e-8) / Math.sqrt(meanGradient + 1e-8);
+		double update = gradient * Math.sqrt(meanUpdate[index] + 1e-8) / Math.sqrt(meanGradient[index] + 1e-8);
 
-		meanUpdate *= decay;
-		meanUpdate += (1 - decay) * update * update;
+		meanUpdate[index] *= decay;
+		meanUpdate[index] += (1 - decay) * update * update;
 
 		return update;
 	}
 
 	@Override
-	public AdaDelta copy() {
-		return new AdaDelta(decay);
+	public AdaDelta copy(int size) {
+		return new AdaDelta(size, decay);
 	}
 }

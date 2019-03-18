@@ -19,9 +19,7 @@ public final class Graph {
 	private final HashSet<Operation> operationsSet = new HashSet<>();
 
 	private final double[] derivatives;
-	private final Optimizer[] optimizers;
-
-	private int exemplesCount = 0;
+	private final Optimizer optimizer;
 
 	private double l1 = 0;
 
@@ -52,11 +50,7 @@ public final class Graph {
 
 		derivatives = new double[paramsCount];
 
-		optimizers = new Optimizer[paramsCount];
-
-		for (int i = 0; i < optimizers.length; i++) {
-			optimizers[i] = optimizer.copy();
-		}
+		this.optimizer = optimizer.copy(paramsCount);
 	}
 
 	private void addParam(Param param) {
@@ -106,37 +100,28 @@ public final class Graph {
 				index++;
 			}
 		}
-
-		exemplesCount++;
 	}
 
 	/**
 	 * Minimizes the graph output by updating its parameters
 	 */
 	public void minimize() {
-		if (exemplesCount == 0) {
-			return;
-		}
-
 		int index = 0;
 
 		for (int i = 0; i < params.length; i++) {
-			Param p = params[i];
 
-			final int size = p.getSize();
+			final int size = params[i].getSize();
 
 			for (int a = 0; a < size; a++) {
-				double gradient = derivatives[index] / exemplesCount + l1 * p.values[a];
+				double gradient = derivatives[index] + l1 * params[i].values[a];
 
-				p.values[a] -= optimizers[index].computeUpdate(gradient);
+				params[i].values[a] -= optimizer.computeUpdate(index, gradient);
 
 				derivatives[index] = 0;
 
 				index++;
 			}
 		}
-
-		exemplesCount = 0;
 	}
 
 	private void findDependentNodes(Operation operation) {

@@ -5,28 +5,35 @@ public final class Adam extends Optimizer {
 	private final double firstMomentDecay;
 	private final double secondMomentDecay;
 
-	private double firstMoment;
-	private double secondMoment;
+	private final double[] firstMoment;
+	private final double[] secondMoment;
 
-	public Adam(double learningRate, double firstMomentDecay, double secondMomentDecay) {
+	private Adam(int size, double learningRate, double firstMomentDecay, double secondMomentDecay) {
+		super(size);
 		this.learningRate = learningRate;
 		this.firstMomentDecay = firstMomentDecay;
 		this.secondMomentDecay = secondMomentDecay;
+		firstMoment = new double[size];
+		secondMoment = new double[size];
+	}
+
+	public Adam(double learningRate, double firstMomentDecay, double secondMomentDecay) {
+		this(0, learningRate, firstMomentDecay, secondMomentDecay);
 	}
 
 	@Override
-	public double computeUpdate(double gradient) {
-		firstMoment *= firstMomentDecay;
-		firstMoment += (1 - firstMomentDecay) * gradient;
+	public double computeUpdate(int index, double gradient) {
+		firstMoment[index] *= firstMomentDecay;
+		firstMoment[index] += (1 - firstMomentDecay) * gradient;
 
-		secondMoment *= secondMomentDecay;
-		secondMoment += (1 - secondMomentDecay) * gradient * gradient;
+		secondMoment[index] *= secondMomentDecay;
+		secondMoment[index] += (1 - secondMomentDecay) * gradient * gradient;
 
-		return learningRate * firstMoment / (Math.sqrt(secondMoment) + 1e-8);
+		return learningRate * firstMoment[index] / (Math.sqrt(secondMoment[index]) + 1e-8);
 	}
 
 	@Override
-	public Adam copy() {
-		return new Adam(learningRate, firstMomentDecay, secondMomentDecay);
+	public Adam copy(int size) {
+		return new Adam(size, learningRate, firstMomentDecay, secondMomentDecay);
 	}
 }
