@@ -18,7 +18,6 @@ public final class Graph {
 	private final ArrayList<Operation> operationsList = new ArrayList<>();
 	private final HashSet<Operation> operationsSet = new HashSet<>();
 
-	private final double[] derivatives;
 	private final Optimizer optimizer;
 
 	private double l1 = 0;
@@ -47,8 +46,6 @@ public final class Graph {
 		for (Param p : params) {
 			paramsCount += p.getSize();
 		}
-
-		derivatives = new double[paramsCount];
 
 		this.optimizer = optimizer.copy(paramsCount);
 	}
@@ -82,23 +79,10 @@ public final class Graph {
 			op.resetDerivatives();
 		}
 
-		for (Param p : params) {
-			p.resetDerivatives();
-		}
-
 		operations[operations.length - 1].derivatives[0] = 1;
 
 		for (int i = operations.length - 1; i >= 0; i--) {
 			operations[i].computeDependenciesDerivatives();
-		}
-
-		int index = 0;
-		for (int i = 0; i < params.length; i++) {
-			final int size = params[i].getSize();
-			for (int a = 0; a < size; a++) {
-				derivatives[index] += params[i].derivatives[a];
-				index++;
-			}
 		}
 	}
 
@@ -113,14 +97,13 @@ public final class Graph {
 			final int size = params[i].getSize();
 
 			for (int a = 0; a < size; a++) {
-				double gradient = derivatives[index] + l1 * params[i].values[a];
+				double gradient = params[i].derivatives[a] + l1 * params[i].values[a];
 
 				params[i].values[a] -= optimizer.computeUpdate(index, gradient);
 
-				derivatives[index] = 0;
-
 				index++;
 			}
+			params[i].resetDerivatives();
 		}
 	}
 
