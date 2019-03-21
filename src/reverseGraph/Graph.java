@@ -12,12 +12,6 @@ public final class Graph {
 	private final Param[] params;
 	private final Operation[] operations;
 
-	private final ArrayList<Param> paramsList = new ArrayList<>();
-	private final HashSet<Param> paramsSet = new HashSet<>();
-
-	private final ArrayList<Operation> operationsList = new ArrayList<>();
-	private final HashSet<Operation> operationsSet = new HashSet<>();
-
 	private final Optimizer optimizer;
 
 	private double l1 = 0;
@@ -28,18 +22,14 @@ public final class Graph {
 	 * @param operation the operation to compute
 	 * @param optimizer an optimizer that updates the parameters
 	 */
-	public Graph(Operation operation, Optimizer optimizer) {
-		findDependentNodes(operation);
-		paramsSet.clear();
-		operationsSet.clear();
+	public Graph(Operation output, Optimizer optimizer) {
+		{
+			ArrayList<Operation> operationsList = new ArrayList<>();
 
-		sortOperations();
+			params = findDependentNodes(output, operationsList);
 
-		params = paramsList.toArray(new Param[0]);
-		paramsList.clear();
-
-		operations = operationsList.toArray(new Operation[0]);
-		operationsList.clear();
+			operations = sortOperations(operationsList);
+		}
 
 		int paramsCount = 0;
 
@@ -48,18 +38,6 @@ public final class Graph {
 		}
 
 		this.optimizer = optimizer.copy(paramsCount);
-	}
-
-	private void addParam(Param param) {
-		if (paramsSet.add(param)) {
-			paramsList.add(param);
-		}
-	}
-
-	private void addOperation(Operation operation) {
-		if (operationsSet.add(operation)) {
-			operationsList.add(operation);
-		}
 	}
 
 	/**
@@ -107,23 +85,31 @@ public final class Graph {
 		}
 	}
 
-	private void findDependentNodes(Operation operation) {
-		addOperation(operation);
+	private Param[] findDependentNodes(Operation operation, ArrayList<Operation> operationsList) {
+		final HashSet<Operation> operationsSet = new HashSet<>();
+		final HashSet<Param> paramsSet = new HashSet<>();
+
+		operationsList.add(operation);
+		operationsSet.add(operation);
 
 		for (int i = 0; i < operationsList.size(); i++) {
 			Operation op = operationsList.get(i);
 
 			for (Node dep : op.getDependencies()) {
 				if (dep instanceof Operation) {
-					addOperation((Operation) dep);
+					if (operationsSet.add((Operation) dep)) {
+						operationsList.add((Operation) dep);
+					}
 				} else if (dep instanceof Param) {
-					addParam((Param) dep);
+					paramsSet.add((Param) dep);
 				}
 			}
 		}
+
+		return paramsSet.toArray(new Param[0]);
 	}
 
-	private void sortOperations() {
+	private Operation[] sortOperations(ArrayList<Operation> operationsList) {
 		final ArrayList<Operation> sortedOperations = new ArrayList<>();
 		final HashSet<Operation> sortedOperationsSet = new HashSet<>();
 
@@ -145,8 +131,7 @@ public final class Graph {
 			}
 		}
 
-		operationsList.clear();
-		operationsList.addAll(sortedOperations);
+		return sortedOperations.toArray(new Operation[0]);
 	}
 
 	public int operationsCount() {
