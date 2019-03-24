@@ -1,14 +1,14 @@
 package examples;
 
 import reverseGraph.Graph;
+import reverseGraph.model.Activation;
+import reverseGraph.model.LayerModel;
+import reverseGraph.model.NeuralNetwork;
 import reverseGraph.nodes.Input;
-import reverseGraph.nodes.operations.Multiplication;
 import reverseGraph.nodes.operations.Operation;
 import reverseGraph.nodes.operations.Substraction;
+import reverseGraph.nodes.operations.activations.Square;
 import reverseGraph.optimizers.Adam;
-import vnl.Activation;
-import vnl.Network;
-import vnl.model.LayerModel;
 
 /*
  * Neural network learning XOR logical gate
@@ -23,8 +23,9 @@ public class XOR {
 		layers[0] = new LayerModel(10, Activation.LEAKYRELU);
 		layers[1] = new LayerModel(1, Activation.TANH);
 
+		NeuralNetwork net = new NeuralNetwork(inputs, layers);
 		// Create net
-		Operation output = Network.createNetwork(inputs, layers);
+		Operation output = net.getOutput();
 
 		// Net label (the desired output)
 		Input label = new Input(1);
@@ -32,13 +33,10 @@ public class XOR {
 		// Add operation to compute the difference between the current and the desired
 		// output
 		Substraction diff = new Substraction(output, label);
-		Multiplication loss = new Multiplication(diff, diff);
+		Square loss = new Square(diff);
 
 		// Create a graph to compute all operations
 		Graph graph = new Graph(loss, new Adam(0.01, 0.9, 0.999));
-
-		System.out.println(graph.paramsCount());
-		System.out.println(graph.operationsCount());
 
 		double errorSum = 1;
 

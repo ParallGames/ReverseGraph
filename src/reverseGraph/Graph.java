@@ -19,7 +19,7 @@ public final class Graph {
 	/**
 	 * Constructs a graph to compute an operation and its dependencies
 	 * 
-	 * @param operation the operation to compute
+	 * @param output    the operation to compute
 	 * @param optimizer an optimizer that updates the parameters
 	 */
 	public Graph(Operation output, Optimizer optimizer) {
@@ -127,19 +127,10 @@ public final class Graph {
 
 				sortedOperations.add(op);
 				sortedOperationsSet.add(op);
-
 			}
 		}
 
 		return sortedOperations.toArray(new Operation[0]);
-	}
-
-	public int operationsCount() {
-		return operations.length;
-	}
-
-	public int paramsCount() {
-		return params.length;
 	}
 
 	public void setL1Regularization(double l1) {

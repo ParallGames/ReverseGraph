@@ -1,6 +1,4 @@
-package vnl.model;
-
-import vnl.Activation;
+package reverseGraph.model;
 
 public class LayerModel {
 	public final int outputSize;
