@@ -8,7 +8,7 @@ import reverseGraph.nodes.Input;
 import reverseGraph.nodes.operations.Operation;
 import reverseGraph.nodes.operations.Substraction;
 import reverseGraph.nodes.operations.activations.Square;
-import reverseGraph.optimizers.Adam;
+import reverseGraph.optimizers.AMSGrad;
 
 /*
  * Neural network learning XOR logical gate
@@ -36,7 +36,7 @@ public class XOR {
 		Square loss = new Square(diff);
 
 		// Create a graph to compute all operations
-		Graph graph = new Graph(loss, new Adam(0.01, 0.9, 0.999));
+		Graph graph = new Graph(loss, new AMSGrad(0.01, 0.9, 0.999));
 
 		double errorSum = 1;
 
