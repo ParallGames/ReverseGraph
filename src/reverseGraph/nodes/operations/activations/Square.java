@@ -16,7 +16,7 @@ public class Square extends Operation {
 	public void compute() {
 		final int size = getSize();
 		for (int i = 0; i < size; i++) {
-			double input = this.inputs.values[i];
+			double input = inputs.values[i];
 			values[i] = input * input;
 		}
 	}
@@ -31,9 +31,8 @@ public class Square extends Operation {
 		if (this.inputs instanceof Derivable) {
 			final int size = getSize();
 			for (int i = 0; i < size; i++) {
-				double input = this.inputs.values[i];
-				double derivative = derivatives[i];
-				((Derivable) this.inputs).derivatives[i] += 2 * input * derivative;
+				double input = inputs.values[i];
+				((Derivable) inputs).derivatives[i] += 2 * input * derivatives[i];
 			}
 		}
 	}

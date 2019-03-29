@@ -35,9 +35,7 @@ public final class Tanh extends Operation {
 				double divider = exp + 1;
 				divider *= divider;
 
-				double result = exp * 4 / divider;
-
-				((Derivable) inputs).derivatives[i] += result * derivatives[i];
+				((Derivable) inputs).derivatives[i] += derivatives[i] * exp * 4 / divider;
 			}
 		}
 	}

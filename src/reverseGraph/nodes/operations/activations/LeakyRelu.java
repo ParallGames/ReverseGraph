@@ -16,7 +16,7 @@ public final class LeakyRelu extends Operation {
 	public void compute() {
 		final int size = getSize();
 		for (int i = 0; i < size; i++) {
-			double input = this.inputs.values[i];
+			double input = inputs.values[i];
 			values[i] = input > 0D ? input : input * 0.01;
 		}
 	}

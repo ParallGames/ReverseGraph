@@ -44,7 +44,7 @@ public final class Substraction extends Operation {
 		if (substraend instanceof Derivable) {
 			final int size = getSize();
 			for (int i = 0; i < size; i++) {
-				((Derivable) minuend).derivatives[i] -= derivatives[i];
+				((Derivable) substraend).derivatives[i] -= derivatives[i];
 			}
 		}
 	}

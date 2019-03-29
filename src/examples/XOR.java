@@ -6,9 +6,8 @@ import reverseGraph.model.LayerModel;
 import reverseGraph.model.NeuralNetwork;
 import reverseGraph.nodes.Input;
 import reverseGraph.nodes.operations.Operation;
-import reverseGraph.nodes.operations.Substraction;
-import reverseGraph.nodes.operations.activations.Square;
-import reverseGraph.optimizers.AMSGrad;
+import reverseGraph.optimizers.Adam;
+import reverseGraph.util.Util;
 
 /*
  * Neural network learning XOR logical gate
@@ -30,13 +29,11 @@ public class XOR {
 		// Net label (the desired output)
 		Input label = new Input(1);
 
-		// Add operation to compute the difference between the current and the desired
-		// output
-		Substraction diff = new Substraction(output, label);
-		Square loss = new Square(diff);
+		// Add operation to compute how far the output is from the label
+		Operation error = Util.createMeanSquareError(output, label);
 
 		// Create a graph to compute all operations
-		Graph graph = new Graph(loss, new AMSGrad(0.01, 0.9, 0.999));
+		Graph graph = new Graph(error, new Adam(0.01, 0.9, 0.999));
 
 		double errorSum = 1;
 
@@ -49,7 +46,7 @@ public class XOR {
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.values[0];
+			errorSum += error.values[0];
 
 			// Learn the current input
 			graph.computeDerivatives();
@@ -61,7 +58,7 @@ public class XOR {
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.values[0];
+			errorSum += error.values[0];
 
 			// Learn the current input
 			graph.computeDerivatives();
@@ -73,7 +70,7 @@ public class XOR {
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.values[0];
+			errorSum += error.values[0];
 
 			// Learn the current input
 			graph.computeDerivatives();
@@ -85,7 +82,7 @@ public class XOR {
 
 			// Compute net output
 			graph.compute();
-			errorSum += loss.values[0];
+			errorSum += error.values[0];
 
 			// Learn the current input
 			graph.computeDerivatives();

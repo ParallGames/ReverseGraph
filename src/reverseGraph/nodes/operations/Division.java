@@ -37,7 +37,7 @@ public final class Division extends Operation {
 		if (dividend instanceof Derivable) {
 			final int size = getSize();
 			for (int i = 0; i < size; i++) {
-				((Derivable) divisor).derivatives[i] += derivatives[i] / divisor.values[i];
+				((Derivable) dividend).derivatives[i] += derivatives[i] / divisor.values[i];
 			}
 		}
 

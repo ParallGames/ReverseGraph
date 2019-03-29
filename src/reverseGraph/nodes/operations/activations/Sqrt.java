@@ -4,10 +4,10 @@ import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.operations.Operation;
 
-public final class Abs extends Operation {
+public class Sqrt extends Operation {
 	private final Node inputs;
 
-	public Abs(Node inputs) {
+	public Sqrt(Node inputs) {
 		super(inputs.getSize());
 		this.inputs = inputs;
 	}
@@ -16,8 +16,7 @@ public final class Abs extends Operation {
 	public void compute() {
 		final int size = getSize();
 		for (int i = 0; i < size; i++) {
-			double input = inputs.values[i];
-			values[i] = input > 0 ? input : -input;
+			values[i] = Math.sqrt(inputs.values[i]);
 		}
 	}
 
@@ -28,11 +27,10 @@ public final class Abs extends Operation {
 
 	@Override
 	public void computeDependenciesDerivatives() {
-		if (this.inputs instanceof Derivable) {
+		if (inputs instanceof Derivable) {
 			final int size = getSize();
 			for (int i = 0; i < size; i++) {
-				double derivative = derivatives[i];
-				((Derivable) inputs).derivatives[i] += inputs.values[i] > 0 ? derivative : -derivative;
+				((Derivable) inputs).derivatives[i] += derivatives[i] / (2 * Math.sqrt(inputs.values[i]));
 			}
 		}
 	}
