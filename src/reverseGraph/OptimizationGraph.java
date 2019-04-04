@@ -8,7 +8,7 @@ import reverseGraph.nodes.Param;
 import reverseGraph.nodes.operations.Operation;
 import reverseGraph.optimizers.Optimizer;
 
-public final class Graph {
+public final class OptimizationGraph {
 	private final Param[] params;
 	private final Operation[] operations;
 
@@ -22,14 +22,12 @@ public final class Graph {
 	 * @param output    the operation to compute
 	 * @param optimizer an optimizer that updates the parameters
 	 */
-	public Graph(Operation output, Optimizer optimizer) {
-		{
-			ArrayList<Operation> operationsList = new ArrayList<>();
+	public OptimizationGraph(Operation output, Optimizer optimizer) {
+		ArrayList<Operation> operationsList = new ArrayList<>();
 
-			params = findDependentNodes(output, operationsList);
+		params = findDependentNodes(output, operationsList);
 
-			operations = sortOperations(operationsList);
-		}
+		operations = sortOperations(operationsList);
 
 		int paramsCount = 0;
 
@@ -85,7 +83,7 @@ public final class Graph {
 		}
 	}
 
-	private Param[] findDependentNodes(Operation operation, ArrayList<Operation> operationsList) {
+	private static Param[] findDependentNodes(Operation operation, ArrayList<Operation> operationsList) {
 		final HashSet<Operation> operationsSet = new HashSet<>();
 		final HashSet<Param> paramsSet = new HashSet<>();
 
@@ -109,7 +107,7 @@ public final class Graph {
 		return paramsSet.toArray(new Param[0]);
 	}
 
-	private Operation[] sortOperations(ArrayList<Operation> operationsList) {
+	private static Operation[] sortOperations(ArrayList<Operation> operationsList) {
 		final ArrayList<Operation> sortedOperations = new ArrayList<>();
 		final HashSet<Operation> sortedOperationsSet = new HashSet<>();
 

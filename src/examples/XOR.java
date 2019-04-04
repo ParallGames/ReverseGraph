@@ -1,6 +1,6 @@
 package examples;
 
-import reverseGraph.Graph;
+import reverseGraph.OptimizationGraph;
 import reverseGraph.model.Activation;
 import reverseGraph.model.LayerModel;
 import reverseGraph.model.NeuralNetwork;
@@ -33,7 +33,7 @@ public class XOR {
 		Operation error = Util.createMeanSquareError(output, label);
 
 		// Create a graph to compute all operations
-		Graph graph = new Graph(error, new Adam(0.01, 0.9, 0.999));
+		OptimizationGraph graph = new OptimizationGraph(error, new Adam(0.01, 0.9, 0.999));
 
 		double errorSum = 1;
 

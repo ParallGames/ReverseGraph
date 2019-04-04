@@ -1,6 +1,6 @@
 package examples;
 
-import reverseGraph.Graph;
+import reverseGraph.OptimizationGraph;
 import reverseGraph.nodes.Param;
 import reverseGraph.nodes.operations.Multiplication;
 import reverseGraph.nodes.operations.Operation;
@@ -23,7 +23,7 @@ public class MinimizeXSquare {
 		Optimizer optimizer = new SGD(0.2);
 
 		// Create a graph to compute and optimize the function x^2
-		Graph graph = new Graph(square, optimizer);
+		OptimizationGraph graph = new OptimizationGraph(square, optimizer);
 
 		for (int i = 0; i < 10; i++) {
 			// Compute the value of x^2
