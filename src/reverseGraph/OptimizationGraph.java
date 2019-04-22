@@ -18,7 +18,7 @@ public final class OptimizationGraph {
 
 	/**
 	 * Constructs a graph to compute an operation and its dependencies
-	 * 
+	 *
 	 * @param output    the operation to compute
 	 * @param optimizer an optimizer that updates the parameters
 	 */
@@ -32,7 +32,7 @@ public final class OptimizationGraph {
 		int paramsCount = 0;
 
 		for (Param p : params) {
-			paramsCount += p.getSize();
+			paramsCount += p.values.length;
 		}
 
 		this.optimizer = optimizer.copy(paramsCount);
@@ -69,10 +69,7 @@ public final class OptimizationGraph {
 		int index = 0;
 
 		for (int i = 0; i < params.length; i++) {
-
-			final int size = params[i].getSize();
-
-			for (int a = 0; a < size; a++) {
+			for (int a = 0; a < params[i].values.length; a++) {
 				double gradient = params[i].derivatives[a] + l1 * params[i].values[a];
 
 				params[i].values[a] -= optimizer.computeUpdate(index, gradient);

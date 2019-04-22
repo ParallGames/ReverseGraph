@@ -1,9 +1,9 @@
 package reverseGraph.model;
 
-import reverseGraph.nodes.operations.Division;
-import reverseGraph.nodes.operations.Expander;
+import reverseGraph.nodes.operations.DivideAll;
 import reverseGraph.nodes.operations.Operation;
 import reverseGraph.nodes.operations.Sum;
+import reverseGraph.nodes.operations.activations.Exp;
 import reverseGraph.nodes.operations.activations.LeakyRelu;
 import reverseGraph.nodes.operations.activations.Sigmoid;
 import reverseGraph.nodes.operations.activations.Tanh;
@@ -22,9 +22,9 @@ public enum Activation {
 		case TANH:
 			return new Tanh(input);
 		case SOFTMAX:
-			Operation sigm = new Sigmoid(input);
+			Exp exp = new Exp(input);
 
-			return new Division(sigm, new Expander(new Sum(sigm), sigm.getSize()));
+			return new DivideAll(exp, new Sum(exp));
 		default:
 			throw new RuntimeException("Unknown activation");
 		}

@@ -6,14 +6,13 @@ import java.util.HashSet;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.operations.Operation;
 
-public class ComputationGraph {
+public final class ComputationGraph {
 	private final Operation[] operations;
 
 	/**
 	 * Constructs a graph to compute an operation and its dependencies
-	 * 
-	 * @param output    the operation to compute
-	 * @param optimizer an optimizer that updates the parameters
+	 *
+	 * @param output the operation to compute
 	 */
 	public ComputationGraph(Operation output) {
 		operations = sortOperations(findDependentOperations(output));

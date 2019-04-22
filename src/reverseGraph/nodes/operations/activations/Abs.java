@@ -8,14 +8,13 @@ public final class Abs extends Operation {
 	private final Node inputs;
 
 	public Abs(Node inputs) {
-		super(inputs.getSize());
+		super(inputs.values.length);
 		this.inputs = inputs;
 	}
 
 	@Override
 	public void compute() {
-		final int size = getSize();
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < values.length; i++) {
 			double input = inputs.values[i];
 			values[i] = input > 0 ? input : -input;
 		}
@@ -29,8 +28,7 @@ public final class Abs extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (this.inputs instanceof Derivable) {
-			final int size = getSize();
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < derivatives.length; i++) {
 				double derivative = derivatives[i];
 				((Derivable) inputs).derivatives[i] += inputs.values[i] > 0 ? derivative : -derivative;
 			}

@@ -8,7 +8,7 @@ public final class Concatenate extends Operation {
 		int size = 0;
 
 		for (Node node : nodes) {
-			size += node.getSize();
+			size += node.values.length;
 		}
 
 		return size;
@@ -27,8 +27,7 @@ public final class Concatenate extends Operation {
 		int index = 0;
 
 		for (int i = 0; i < inputs.length; i++) {
-			final int size = inputs[i].getSize();
-			for (int a = 0; a < size; a++) {
+			for (int a = 0; a < inputs[i].values.length; a++) {
 				values[index] = inputs[i].values[a];
 				index++;
 			}
@@ -42,19 +41,17 @@ public final class Concatenate extends Operation {
 
 	@Override
 	public void computeDependenciesDerivatives() {
-
 		int index = 0;
+
 		for (int i = 0; i < inputs.length; i++) {
 			if (inputs[i] instanceof Derivable) {
-				final int size = inputs[i].getSize();
-				for (int a = 0; a < size; a++) {
+				for (int a = 0; a < inputs[i].values.length; a++) {
 					((Derivable) inputs[i]).derivatives[a] += derivatives[index];
 					index++;
 				}
 			} else {
-				index += inputs[i].getSize();
+				index += inputs[i].values.length;
 			}
-
 		}
 	}
 }

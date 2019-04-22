@@ -9,10 +9,10 @@ public final class Addition extends Operation {
 	private final Node addend2;
 
 	public Addition(Node addend1, Node addend2) {
-		super(addend1.getSize());
+		super(addend1.values.length);
 
-		if (addend1.getSize() != addend2.getSize()) {
-			throw new DifferentSizeException(addend1.getSize(), addend2.getSize());
+		if (addend1.values.length != addend2.values.length) {
+			throw new DifferentSizeException(addend1.values.length, addend2.values.length);
 		}
 
 		this.addend1 = addend1;
@@ -21,8 +21,7 @@ public final class Addition extends Operation {
 
 	@Override
 	public void compute() {
-		final int size = getSize();
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < values.length; i++) {
 			values[i] = addend1.values[i] + addend2.values[i];
 		}
 	}

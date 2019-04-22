@@ -8,15 +8,14 @@ public final class Tanh extends Operation {
 	private final Node inputs;
 
 	public Tanh(Node inputs) {
-		super(inputs.getSize());
+		super(inputs.values.length);
 		this.inputs = inputs;
 	}
 
 	@Override
 	public void compute() {
-		final int size = getSize();
-		for (int i = 0; i < size; i++) {
-			values[i] = Math.tanh(inputs.values[i]);
+		for (int i = 0; i < values.length; i++) {
+			values[i] = 2D / (1D + Math.exp(-2 * inputs.values[i])) - 1;
 		}
 	}
 
@@ -28,8 +27,7 @@ public final class Tanh extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (inputs instanceof Derivable) {
-			final int size = getSize();
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < derivatives.length; i++) {
 				double exp = Math.exp(2 * inputs.values[i]);
 
 				double divider = exp + 1;

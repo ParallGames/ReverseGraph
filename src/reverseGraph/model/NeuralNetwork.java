@@ -36,7 +36,7 @@ public class NeuralNetwork {
 		weights = new Param[layers.length];
 		biases = new Param[layers.length];
 
-		weights[0] = Util.createXavierWeights(inputs.getSize(), layers[0].outputSize);
+		weights[0] = Util.createXavierWeights(inputs.values.length, layers[0].outputSize);
 		biases[0] = new Param(layers[0].outputSize);
 		this.layers[0] = layers[0].activation.apply(new Layer(inputs, weights[0], biases[0]));
 

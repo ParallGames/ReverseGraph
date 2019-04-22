@@ -16,15 +16,14 @@ public abstract class Derivable extends Node {
 	}
 
 	public void resetDerivatives() {
-		final int size = getSize();
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < this.values.length; i++) {
 			derivatives[i] = 0;
 		}
 	}
 
 	public void addToDerivatives(double[] values) {
-		if (values.length != getSize()) {
-			throw new WrongSizeException(values.length, getSize());
+		if (values.length != this.values.length) {
+			throw new WrongSizeException(values.length, this.values.length);
 		}
 
 		for (int i = 0; i < values.length; i++) {

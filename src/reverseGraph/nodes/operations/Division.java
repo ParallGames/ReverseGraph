@@ -9,10 +9,10 @@ public final class Division extends Operation {
 	private final Node divisor;
 
 	public Division(Node dividend, Node divisor) {
-		super(dividend.getSize());
+		super(dividend.values.length);
 
-		if (dividend.getSize() != divisor.getSize()) {
-			throw new DifferentSizeException(dividend.getSize(), divisor.getSize());
+		if (dividend.values.length != divisor.values.length) {
+			throw new DifferentSizeException(dividend.values.length, divisor.values.length);
 		}
 
 		this.dividend = dividend;
@@ -21,8 +21,7 @@ public final class Division extends Operation {
 
 	@Override
 	public void compute() {
-		final int size = getSize();
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < values.length; i++) {
 			values[i] = dividend.values[i] / divisor.values[i];
 		}
 	}
@@ -35,15 +34,13 @@ public final class Division extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (dividend instanceof Derivable) {
-			final int size = getSize();
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < derivatives.length; i++) {
 				((Derivable) dividend).derivatives[i] += derivatives[i] / divisor.values[i];
 			}
 		}
 
 		if (divisor instanceof Derivable) {
-			final int size = getSize();
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < derivatives.length; i++) {
 				((Derivable) divisor).derivatives[i] -= derivatives[i] * dividend.values[i]
 						/ (divisor.values[i] * divisor.values[i]);
 			}

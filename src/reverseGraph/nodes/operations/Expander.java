@@ -10,8 +10,8 @@ public final class Expander extends Operation {
 	public Expander(Node input, int outSize) {
 		super(outSize);
 
-		if (input.getSize() != 1) {
-			throw new WrongSizeException(input.getSize(), 1);
+		if (input.values.length != 1) {
+			throw new WrongSizeException(input.values.length, 1);
 		}
 
 		this.input = input;
@@ -19,8 +19,7 @@ public final class Expander extends Operation {
 
 	@Override
 	public void compute() {
-		final int size = getSize();
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < values.length; i++) {
 			values[i] = input.values[0];
 		}
 	}
@@ -35,8 +34,7 @@ public final class Expander extends Operation {
 		if (input instanceof Derivable) {
 			double sum = 0;
 
-			final int size = getSize();
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < derivatives.length; i++) {
 				sum += derivatives[i];
 			}
 

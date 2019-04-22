@@ -11,7 +11,8 @@ import reverseGraph.nodes.operations.Operation;
 import reverseGraph.nodes.operations.Substraction;
 import reverseGraph.nodes.operations.Sum;
 import reverseGraph.nodes.operations.activations.Abs;
-import reverseGraph.nodes.operations.activations.NegativeLog;
+import reverseGraph.nodes.operations.activations.Log;
+import reverseGraph.nodes.operations.activations.Negate;
 import reverseGraph.nodes.operations.activations.Sqrt;
 import reverseGraph.nodes.operations.activations.Square;
 
@@ -43,7 +44,8 @@ public class Util {
 	}
 
 	public static Operation createMeanSquareError(Node output, Node desiredOutput) {
-		return new Division(createSquareError(output, desiredOutput), new Constant(new double[] { output.getSize() }));
+		return new Division(createSquareError(output, desiredOutput),
+				new Constant(new double[] { output.values.length }));
 	}
 
 	public static Operation createAbsoluteError(Node output, Node desiredOutput) {
@@ -52,7 +54,7 @@ public class Util {
 
 	public static Operation createMeanAbsoluteError(Node output, Node desiredOutput) {
 		return new Division(createAbsoluteError(output, desiredOutput),
-				new Constant(new double[] { output.getSize() }));
+				new Constant(new double[] { output.values.length }));
 	}
 
 	public static Operation createRootMeanSquareError(Node output, Node desiredOutput) {
@@ -60,6 +62,6 @@ public class Util {
 	}
 
 	public static Operation createNegativeLogLikelihood(Node output, Node desiredOutput) {
-		return new Sum(new Multiplication(new NegativeLog(output), desiredOutput));
+		return new Negate(new Sum(new Multiplication(new Log(output), desiredOutput)));
 	}
 }

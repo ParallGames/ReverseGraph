@@ -4,10 +4,10 @@ import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.operations.Operation;
 
-public class Square extends Operation {
+public class Log extends Operation {
 	private final Node inputs;
 
-	public Square(Node inputs) {
+	public Log(Node inputs) {
 		super(inputs.values.length);
 		this.inputs = inputs;
 	}
@@ -15,8 +15,7 @@ public class Square extends Operation {
 	@Override
 	public void compute() {
 		for (int i = 0; i < values.length; i++) {
-			double input = inputs.values[i];
-			values[i] = input * input;
+			values[i] = Math.log(inputs.values[i]);
 		}
 	}
 
@@ -29,8 +28,7 @@ public class Square extends Operation {
 	public void computeDependenciesDerivatives() {
 		if (this.inputs instanceof Derivable) {
 			for (int i = 0; i < derivatives.length; i++) {
-				double input = inputs.values[i];
-				((Derivable) inputs).derivatives[i] += 2 * input * derivatives[i];
+				((Derivable) inputs).derivatives[i] += derivatives[i] / inputs.values[i];
 			}
 		}
 	}

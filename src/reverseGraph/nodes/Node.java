@@ -11,20 +11,15 @@ public abstract class Node {
 		this.values = values;
 	}
 
-	public final int getSize() {
-		return values.length;
-	}
-
 	@Override
 	public String toString() {
 		String str = "{";
 
-		final int size = getSize();
-		for (int i = 0; i < size - 1; i++) {
+		for (int i = 0; i < values.length - 1; i++) {
 			str += values[i] + ", ";
 		}
 
-		str += values[size - 1] + "}";
+		str += values[values.length - 1] + "}";
 
 		return String.valueOf(str);
 	}

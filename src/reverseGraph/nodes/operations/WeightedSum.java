@@ -12,8 +12,8 @@ public final class WeightedSum extends Operation {
 	public WeightedSum(Node addends, Node weights) {
 		super(1);
 
-		if (addends.getSize() != weights.getSize()) {
-			throw new DifferentSizeException(addends.getSize(), weights.getSize());
+		if (addends.values.length != weights.values.length) {
+			throw new DifferentSizeException(addends.values.length, weights.values.length);
 		}
 
 		this.addends = addends;
@@ -24,8 +24,7 @@ public final class WeightedSum extends Operation {
 	public void compute() {
 		double output = 0;
 
-		final int size = addends.getSize();
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < values.length; i++) {
 			output += addends.values[i] * weights.values[i];
 		}
 
@@ -40,15 +39,13 @@ public final class WeightedSum extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (addends instanceof Derivable) {
-			final int size = addends.getSize();
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < derivatives.length; i++) {
 				((Derivable) addends).derivatives[i] += derivatives[0] * weights.values[i];
 			}
 		}
 
 		if (weights instanceof Derivable) {
-			final int size = addends.getSize();
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < derivatives.length; i++) {
 				((Derivable) weights).derivatives[i] += derivatives[0] * addends.values[i];
 			}
 		}

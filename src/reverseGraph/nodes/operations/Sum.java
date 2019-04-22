@@ -32,10 +32,10 @@ public final class Sum extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		for (Node node : addends) {
+			Derivable derivable = (Derivable) node;
 			if (node instanceof Derivable) {
-				final int size = node.getSize();
-				for (int i = 0; i < size; i++) {
-					((Derivable) node).derivatives[i] += derivatives[0];
+				for (int i = 0; i < node.values.length; i++) {
+					derivable.derivatives[i] += derivatives[0];
 				}
 			}
 		}
