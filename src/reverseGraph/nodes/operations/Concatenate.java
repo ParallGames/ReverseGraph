@@ -27,10 +27,8 @@ public final class Concatenate extends Operation {
 		int index = 0;
 
 		for (int i = 0; i < inputs.length; i++) {
-			for (int a = 0; a < inputs[i].values.length; a++) {
-				values[index] = inputs[i].values[a];
-				index++;
-			}
+			System.arraycopy(inputs[i].values, 0, values, index, inputs[i].values.length);
+			index += inputs[i].values.length;
 		}
 	}
 
@@ -45,13 +43,11 @@ public final class Concatenate extends Operation {
 
 		for (int i = 0; i < inputs.length; i++) {
 			if (inputs[i] instanceof Derivable) {
-				for (int a = 0; a < inputs[i].values.length; a++) {
-					((Derivable) inputs[i]).derivatives[a] += derivatives[index];
-					index++;
-				}
-			} else {
-				index += inputs[i].values.length;
+				Derivable derivable = ((Derivable) inputs[i]);
+
+				System.arraycopy(derivatives, index, derivable.derivatives, 0, derivable.derivatives.length);
 			}
+			index += inputs[i].values.length;
 		}
 	}
 }

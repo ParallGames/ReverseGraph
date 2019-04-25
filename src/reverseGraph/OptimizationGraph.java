@@ -1,6 +1,7 @@
 package reverseGraph;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 
 import reverseGraph.nodes.Node;
@@ -51,11 +52,15 @@ public final class OptimizationGraph {
 	 * Compute derivatives for the last computed values
 	 */
 	public void computeDerivatives() {
-		for (Operation op : operations) {
-			op.resetDerivatives();
+		for (int i = 0; i < operations.length; i++) {
+			for (int a = 0; a < operations[i].derivatives.length; a++) {
+				operations[i].derivatives[a] = 0;
+			}
 		}
 
-		operations[operations.length - 1].derivatives[0] = 1;
+		for (int i = 0; i < operations[operations.length - 1].derivatives.length; i++) {
+			operations[operations.length - 1].derivatives[i] = 1;
+		}
 
 		for (int i = operations.length - 1; i >= 0; i--) {
 			operations[i].computeDependenciesDerivatives();
@@ -76,7 +81,10 @@ public final class OptimizationGraph {
 
 				index++;
 			}
-			params[i].resetDerivatives();
+
+			for (int a = 0; a < params[i].derivatives.length; a++) {
+				params[i].derivatives[a] = 0;
+			}
 		}
 	}
 
@@ -105,27 +113,14 @@ public final class OptimizationGraph {
 	}
 
 	private static Operation[] sortOperations(ArrayList<Operation> operationsList) {
-		final ArrayList<Operation> sortedOperations = new ArrayList<>();
-		final HashSet<Operation> sortedOperationsSet = new HashSet<>();
-
-		while (!operationsList.isEmpty()) {
-			operationLoop: for (int i = operationsList.size() - 1; i >= 0; i--) {
-				Operation op = operationsList.get(i);
-
-				for (Node n : op.getDependencies()) {
-					if (n instanceof Operation && !sortedOperationsSet.contains(n)) {
-						continue operationLoop;
-					}
-				}
-
-				operationsList.remove(i);
-
-				sortedOperations.add(op);
-				sortedOperationsSet.add(op);
+		operationsList.sort(new Comparator<Operation>() {
+			@Override
+			public int compare(Operation o1, Operation o2) {
+				return o1.index - o2.index;
 			}
-		}
+		});
 
-		return sortedOperations.toArray(new Operation[0]);
+		return operationsList.toArray(new Operation[0]);
 	}
 
 	public void setL1Regularization(double l1) {

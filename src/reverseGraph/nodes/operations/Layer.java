@@ -24,11 +24,10 @@ public final class Layer extends Operation {
 	@Override
 	public void compute() {
 		for (int o = 0; o < values.length; o++) {
-			double sum = biases.values[o];
+			values[o] = biases.values[o];
 			for (int i = 0; i < inputs.values.length; i++) {
-				sum += inputs.values[i] * weights.values[o * inputs.values.length + i];
+				values[o] += inputs.values[i] * weights.values[o * inputs.values.length + i];
 			}
-			values[o] = sum;
 		}
 	}
 
@@ -61,11 +60,9 @@ public final class Layer extends Operation {
 			Derivable derivable = (Derivable) inputs;
 
 			for (int i = 0; i < inputs.values.length; i++) {
-				double derivative = 0;
 				for (int o = 0; o < derivatives.length; o++) {
-					derivative += weights.values[o * inputs.values.length + i] * derivatives[o];
+					derivable.derivatives[i] += weights.values[o * inputs.values.length + i] * derivatives[o];
 				}
-				derivable.derivatives[i] += derivative;
 			}
 		}
 	}

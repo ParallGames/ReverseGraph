@@ -15,7 +15,7 @@ public final class Tanh extends Operation {
 	@Override
 	public void compute() {
 		for (int i = 0; i < values.length; i++) {
-			values[i] = 2D / (1D + Math.exp(-2 * inputs.values[i])) - 1;
+			values[i] = 2D / (1D + Math.exp(-2D * inputs.values[i])) - 1D;
 		}
 	}
 
@@ -27,13 +27,15 @@ public final class Tanh extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (inputs instanceof Derivable) {
-			for (int i = 0; i < derivatives.length; i++) {
-				double exp = Math.exp(2 * inputs.values[i]);
+			Derivable derivable = ((Derivable) inputs);
 
-				double divider = exp + 1;
+			for (int i = 0; i < derivatives.length; i++) {
+				double exp = Math.exp(2D * inputs.values[i]);
+
+				double divider = exp + 1D;
 				divider *= divider;
 
-				((Derivable) inputs).derivatives[i] += derivatives[i] * exp * 4 / divider;
+				derivable.derivatives[i] += derivatives[i] * exp * 4D / divider;
 			}
 		}
 	}

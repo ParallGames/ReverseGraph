@@ -34,11 +34,19 @@ public final class Addition extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (addend1 instanceof Derivable) {
-			((Derivable) addend1).addToDerivatives(derivatives);
+			Derivable derivable = ((Derivable) addend1);
+
+			for (int i = 0; i < derivable.derivatives.length; i++) {
+				derivable.derivatives[i] += derivatives[i];
+			}
 		}
 
 		if (addend1 instanceof Derivable) {
-			((Derivable) addend2).addToDerivatives(derivatives);
+			Derivable derivable = ((Derivable) addend2);
+
+			for (int i = 0; i < derivable.derivatives.length; i++) {
+				derivable.derivatives[i] += derivatives[i];
+			}
 		}
 	}
 }

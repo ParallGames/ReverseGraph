@@ -16,8 +16,6 @@ public final class Param extends Derivable {
 			throw new WrongSizeException(values.length, this.values.length);
 		}
 
-		for (int i = 0; i < values.length; i++) {
-			this.values[i] = values[i];
-		}
+		System.arraycopy(values, 0, this.values, 0, values.length);
 	}
 }
