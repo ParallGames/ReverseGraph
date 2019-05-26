@@ -1,6 +1,7 @@
 package reverseGraph;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 
 import reverseGraph.nodes.Node;
@@ -50,26 +51,13 @@ public final class ComputationGraph {
 	}
 
 	private static Operation[] sortOperations(ArrayList<Operation> operationsList) {
-		final ArrayList<Operation> sortedOperations = new ArrayList<>();
-		final HashSet<Operation> sortedOperationsSet = new HashSet<>();
-
-		while (!operationsList.isEmpty()) {
-			operationLoop: for (int i = operationsList.size() - 1; i >= 0; i--) {
-				Operation op = operationsList.get(i);
-
-				for (Node n : op.getDependencies()) {
-					if (n instanceof Operation && !sortedOperationsSet.contains(n)) {
-						continue operationLoop;
-					}
-				}
-
-				operationsList.remove(i);
-
-				sortedOperations.add(op);
-				sortedOperationsSet.add(op);
+		operationsList.sort(new Comparator<Operation>() {
+			@Override
+			public int compare(Operation o1, Operation o2) {
+				return o1.index - o2.index;
 			}
-		}
+		});
 
-		return sortedOperations.toArray(new Operation[0]);
+		return operationsList.toArray(new Operation[0]);
 	}
 }

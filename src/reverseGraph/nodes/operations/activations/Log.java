@@ -4,7 +4,7 @@ import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.operations.Operation;
 
-public class Log extends Operation {
+public final class Log extends Operation {
 	private final Node inputs;
 
 	public Log(Node inputs) {

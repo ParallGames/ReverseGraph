@@ -4,7 +4,7 @@ import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.operations.Operation;
 
-public class Square extends Operation {
+public final class Square extends Operation {
 	private final Node inputs;
 
 	public Square(Node inputs) {

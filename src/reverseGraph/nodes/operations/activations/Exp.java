@@ -4,7 +4,7 @@ import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.operations.Operation;
 
-public class Exp extends Operation {
+public final class Exp extends Operation {
 	private final Node inputs;
 
 	public Exp(Node inputs) {

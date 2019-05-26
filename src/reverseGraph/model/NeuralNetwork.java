@@ -1,6 +1,5 @@
 package reverseGraph.model;
 
-import reverseGraph.DifferentSizeException;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.Param;
 import reverseGraph.nodes.operations.Layer;
@@ -13,41 +12,24 @@ public class NeuralNetwork {
 	private final Node[] weights;
 	private final Node[] biases;
 
-	public NeuralNetwork(Node inputs, Node[] weights, Node[] biases, Activation[] activations) {
-		if (weights.length != biases.length) {
-			throw new DifferentSizeException(weights.length, biases.length);
-		}
-
+	public NeuralNetwork(Node inputs, LayerModel[] layerModels) {
 		this.inputs = inputs;
-		layers = new Operation[weights.length];
-		this.weights = weights;
-		this.biases = biases;
-
-		layers[0] = activations[0].apply(new Layer(inputs, weights[0], biases[0]));
-
-		for (int i = 1; i < weights.length; i++) {
-			layers[i] = activations[i].apply(new Layer(layers[i - 1], weights[i], biases[i]));
-		}
-	}
-
-	public NeuralNetwork(Node inputs, LayerModel[] layers) {
-		this.inputs = inputs;
-		this.layers = new Operation[layers.length];
+		this.layers = new Operation[layerModels.length];
 		weights = new Param[layers.length];
 		biases = new Param[layers.length];
 
-		weights[0] = Util.createXavierWeights(inputs.values.length, layers[0].outputSize);
-		biases[0] = new Param(layers[0].outputSize);
-		this.layers[0] = layers[0].activation.apply(new Layer(inputs, weights[0], biases[0]));
+		weights[0] = Util.createXavierWeights(inputs.values.length, layerModels[0].outputSize);
+		biases[0] = new Param(layerModels[0].outputSize);
+		this.layers[0] = layerModels[0].activation.apply(new Layer(inputs, weights[0], biases[0]));
 
 		for (int i = 1; i < layers.length; i++) {
-			weights[i] = Util.createXavierWeights(layers[i - 1].outputSize, layers[i].outputSize);
-			biases[i] = new Param(layers[i].outputSize);
-			this.layers[i] = layers[i].activation.apply(new Layer(this.layers[i - 1], weights[i], biases[i]));
+			weights[i] = Util.createXavierWeights(layerModels[i - 1].outputSize, layerModels[i].outputSize);
+			biases[i] = new Param(layerModels[i].outputSize);
+			this.layers[i] = layerModels[i].activation.apply(new Layer(this.layers[i - 1], weights[i], biases[i]));
 		}
 	}
 
-	public Node getInputs() {
+	public Node getInput() {
 		return inputs;
 	}
 
@@ -55,11 +37,11 @@ public class NeuralNetwork {
 		return layers[layer];
 	}
 
-	public Node getWeights(int layer) {
+	public Node getWeight(int layer) {
 		return weights[layer];
 	}
 
-	public Node getBiases(int layer) {
+	public Node getBias(int layer) {
 		return biases[layer];
 	}
 

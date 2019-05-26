@@ -4,7 +4,7 @@ import reverseGraph.WrongSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
-public class DivideAll extends Operation {
+public final class DivideAll extends Operation {
 	private final Node dividend;
 	private final Node divisor;
 

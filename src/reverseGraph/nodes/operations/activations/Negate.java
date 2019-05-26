@@ -4,7 +4,7 @@ import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.operations.Operation;
 
-public class Negate extends Operation {
+public final class Negate extends Operation {
 	private final Node inputs;
 
 	public Negate(Node inputs) {

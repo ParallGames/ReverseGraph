@@ -1,10 +1,6 @@
 package reverseGraph.nodes;
 
 public abstract class Node {
-	private static int count = 0;
-
-	public final int index = count++;
-
 	public final double[] values;
 
 	protected Node(int outSize) {

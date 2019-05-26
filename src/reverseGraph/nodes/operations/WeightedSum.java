@@ -5,7 +5,6 @@ import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
 public final class WeightedSum extends Operation {
-
 	private final Node addends;
 	private final Node weights;
 

@@ -13,15 +13,13 @@ public final class Sum extends Operation {
 
 	@Override
 	public void compute() {
-		double output = 0;
+		values[0] = 0;
 
 		for (Node node : addends) {
 			for (double value : node.values) {
-				output += value;
+				values[0] += value;
 			}
 		}
-
-		values[0] = output;
 	}
 
 	@Override

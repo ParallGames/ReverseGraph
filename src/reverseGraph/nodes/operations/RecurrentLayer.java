@@ -4,7 +4,7 @@ import reverseGraph.DifferentSizeException;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
-public class RecurrentLayer extends Operation {
+public final class RecurrentLayer extends Operation {
 	private final Node inputs;
 	private final Node weights;
 	private final Node biases;
