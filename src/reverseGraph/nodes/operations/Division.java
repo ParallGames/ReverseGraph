@@ -1,6 +1,6 @@
 package reverseGraph.nodes.operations;
 
-import reverseGraph.DifferentSizeException;
+import reverseGraph.exceptions.Assert;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
@@ -9,11 +9,9 @@ public final class Division extends Operation {
 	private final Node divisor;
 
 	public Division(Node dividend, Node divisor) {
-		super(dividend.values.length);
+		super(dividend.values.dimensions);
 
-		if (dividend.values.length != divisor.values.length) {
-			throw new DifferentSizeException(dividend.values.length, divisor.values.length);
-		}
+		Assert.sameDimensions(dividend.values.dimensions, divisor.values.dimensions);
 
 		this.dividend = dividend;
 		this.divisor = divisor;
@@ -21,8 +19,8 @@ public final class Division extends Operation {
 
 	@Override
 	public void compute() {
-		for (int i = 0; i < values.length; i++) {
-			values[i] = dividend.values[i] / divisor.values[i];
+		for (int i = 0; i < values.flat.length; i++) {
+			values.flat[i] = dividend.values.flat[i] / divisor.values.flat[i];
 		}
 	}
 
@@ -34,15 +32,15 @@ public final class Division extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (dividend instanceof Derivable) {
-			for (int i = 0; i < derivatives.length; i++) {
-				((Derivable) dividend).derivatives[i] += derivatives[i] / divisor.values[i];
+			for (int i = 0; i < derivatives.flat.length; i++) {
+				((Derivable) dividend).derivatives.flat[i] += derivatives.flat[i] / divisor.values.flat[i];
 			}
 		}
 
 		if (divisor instanceof Derivable) {
-			for (int i = 0; i < derivatives.length; i++) {
-				((Derivable) divisor).derivatives[i] -= derivatives[i] * dividend.values[i]
-						/ (divisor.values[i] * divisor.values[i]);
+			for (int i = 0; i < derivatives.flat.length; i++) {
+				((Derivable) divisor).derivatives.flat[i] -= derivatives.flat[i] * dividend.values.flat[i]
+						/ (divisor.values.flat[i] * divisor.values.flat[i]);
 			}
 		}
 	}

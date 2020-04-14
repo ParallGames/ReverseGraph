@@ -1,15 +1,18 @@
 package reverseGraph.nodes;
 
-public abstract class Derivable extends Node {
-	public final double[] derivatives;
+import reverseGraph.data.Dimensions;
+import reverseGraph.data.Tensor;
 
-	public Derivable(int outSize) {
-		super(outSize);
-		derivatives = new double[outSize];
+public abstract class Derivable extends Node {
+	public final Tensor derivatives;
+
+	public Derivable(Dimensions dimensions) {
+		super(dimensions);
+		derivatives = new Tensor(dimensions);
 	}
 
-	public Derivable(double[] initialValues) {
+	public Derivable(Tensor initialValues) {
 		super(initialValues);
-		derivatives = new double[initialValues.length];
+		derivatives = new Tensor(initialValues.dimensions);
 	}
 }

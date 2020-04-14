@@ -8,15 +8,15 @@ public final class Square extends Operation {
 	private final Node inputs;
 
 	public Square(Node inputs) {
-		super(inputs.values.length);
+		super(inputs.values.dimensions);
 		this.inputs = inputs;
 	}
 
 	@Override
 	public void compute() {
-		for (int i = 0; i < values.length; i++) {
-			double input = inputs.values[i];
-			values[i] = input * input;
+		for (int i = 0; i < values.flat.length; i++) {
+			double input = inputs.values.flat[i];
+			values.flat[i] = input * input;
 		}
 	}
 
@@ -28,9 +28,9 @@ public final class Square extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (this.inputs instanceof Derivable) {
-			for (int i = 0; i < derivatives.length; i++) {
-				double input = inputs.values[i];
-				((Derivable) inputs).derivatives[i] += 2 * input * derivatives[i];
+			for (int i = 0; i < derivatives.flat.length; i++) {
+				double input = inputs.values.flat[i];
+				((Derivable) inputs).derivatives.flat[i] += 2 * input * derivatives.flat[i];
 			}
 		}
 	}

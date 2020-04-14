@@ -1,21 +1,14 @@
 package reverseGraph.nodes;
 
-import reverseGraph.WrongSizeException;
+import reverseGraph.data.Dimensions;
+import reverseGraph.data.Tensor;
 
 public final class Param extends Derivable {
-	public Param(int outSize) {
-		super(outSize);
+	public Param(Dimensions dimensions) {
+		super(dimensions);
 	}
 
-	public Param(double[] initialValues) {
+	public Param(Tensor initialValues) {
 		super(initialValues);
-	}
-
-	public void setValues(double[] values) {
-		if (values.length != this.values.length) {
-			throw new WrongSizeException(values.length, this.values.length);
-		}
-
-		System.arraycopy(values, 0, this.values, 0, values.length);
 	}
 }

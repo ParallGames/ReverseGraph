@@ -8,7 +8,7 @@ public class SoftmaxExp extends Operation {
 	private final Node inputs;
 
 	public SoftmaxExp(Node inputs) {
-		super(inputs.values.length);
+		super(inputs.values.dimensions);
 		this.inputs = inputs;
 	}
 
@@ -16,14 +16,14 @@ public class SoftmaxExp extends Operation {
 	public void compute() {
 		double max = Double.NEGATIVE_INFINITY;
 
-		for (int i = 0; i < inputs.values.length; i++) {
-			if (inputs.values[i] > max) {
-				max = inputs.values[i];
+		for (int i = 0; i < inputs.values.flat.length; i++) {
+			if (inputs.values.flat[i] > max) {
+				max = inputs.values.flat[i];
 			}
 		}
 
-		for (int i = 0; i < values.length; i++) {
-			values[i] = Math.exp(inputs.values[i] - max);
+		for (int i = 0; i < values.flat.length; i++) {
+			values.flat[i] = Math.exp(inputs.values.flat[i] - max);
 		}
 	}
 
@@ -35,8 +35,8 @@ public class SoftmaxExp extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (this.inputs instanceof Derivable) {
-			for (int i = 0; i < derivatives.length; i++) {
-				((Derivable) inputs).derivatives[i] += derivatives[i] * values[i];
+			for (int i = 0; i < derivatives.flat.length; i++) {
+				((Derivable) inputs).derivatives.flat[i] += derivatives.flat[i] * values.flat[i];
 			}
 		}
 	}

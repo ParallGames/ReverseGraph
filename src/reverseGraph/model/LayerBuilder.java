@@ -1,5 +1,6 @@
 package reverseGraph.model;
 
+import reverseGraph.data.Dimensions;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.Param;
 import reverseGraph.nodes.operations.Layer;
@@ -14,7 +15,7 @@ public class LayerBuilder {
 
 	public LayerBuilder(Node[] inputs, LayerModel model) {
 		this.weights = Util.createXavierWeights(inputs.length, model.outputSize);
-		this.biases = new Param(model.outputSize);
+		this.biases = new Param(new Dimensions(model.outputSize));
 
 		outputs = new Operation[inputs.length];
 

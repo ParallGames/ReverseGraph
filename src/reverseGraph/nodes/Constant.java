@@ -1,7 +1,9 @@
 package reverseGraph.nodes;
 
+import reverseGraph.data.Tensor;
+
 public final class Constant extends Node {
-	public Constant(double[] values) {
+	public Constant(Tensor values) {
 		super(values);
 	}
 }

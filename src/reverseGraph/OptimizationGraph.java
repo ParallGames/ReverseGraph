@@ -33,7 +33,7 @@ public final class OptimizationGraph {
 		int paramsCount = 0;
 
 		for (Param p : params) {
-			paramsCount += p.values.length;
+			paramsCount += p.values.flat.length;
 		}
 
 		this.optimizer = optimizer.copy(paramsCount);
@@ -52,14 +52,14 @@ public final class OptimizationGraph {
 	 * Compute derivatives for the last computed values
 	 */
 	public void computeDerivatives() {
-		for (int i = 0; i < operations.length; i++) {
-			for (int a = 0; a < operations[i].derivatives.length; a++) {
-				operations[i].derivatives[a] = 0;
+		for (int i = 0; i < operations.length - 1; i++) {
+			for (int a = 0; a < operations[i].derivatives.flat.length; a++) {
+				operations[i].derivatives.flat[a] = 0;
 			}
 		}
 
-		for (int i = 0; i < operations[operations.length - 1].derivatives.length; i++) {
-			operations[operations.length - 1].derivatives[i] = 1;
+		for (int i = 0; i < operations[operations.length - 1].derivatives.flat.length; i++) {
+			operations[operations.length - 1].derivatives.flat[i] = 1;
 		}
 
 		for (int i = operations.length - 1; i >= 0; i--) {
@@ -74,16 +74,16 @@ public final class OptimizationGraph {
 		int index = 0;
 
 		for (int i = 0; i < params.length; i++) {
-			for (int a = 0; a < params[i].values.length; a++) {
-				double gradient = params[i].derivatives[a] + l1 * params[i].values[a];
+			for (int a = 0; a < params[i].values.flat.length; a++) {
+				double gradient = params[i].derivatives.flat[a] + l1 * params[i].values.flat[a];
 
-				params[i].values[a] -= optimizer.computeUpdate(index, gradient);
+				params[i].values.flat[a] -= optimizer.computeUpdate(index, gradient);
 
 				index++;
 			}
 
-			for (int a = 0; a < params[i].derivatives.length; a++) {
-				params[i].derivatives[a] = 0;
+			for (int a = 0; a < params[i].derivatives.flat.length; a++) {
+				params[i].derivatives.flat[a] = 0;
 			}
 		}
 	}

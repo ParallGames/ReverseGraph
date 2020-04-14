@@ -1,6 +1,7 @@
 package reverseGraph.nodes.operations;
 
-import reverseGraph.DifferentSizeException;
+import reverseGraph.data.Dimensions;
+import reverseGraph.exceptions.Assert;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
@@ -9,11 +10,9 @@ public final class WeightedSum extends Operation {
 	private final Node weights;
 
 	public WeightedSum(Node addends, Node weights) {
-		super(1);
+		super(Dimensions.SCALAR);
 
-		if (addends.values.length != weights.values.length) {
-			throw new DifferentSizeException(addends.values.length, weights.values.length);
-		}
+		Assert.sameDimensions(addends.values.dimensions, weights.values.dimensions);
 
 		this.addends = addends;
 		this.weights = weights;
@@ -21,13 +20,13 @@ public final class WeightedSum extends Operation {
 
 	@Override
 	public void compute() {
-		double output = 0;
+		double sum = 0;
 
-		for (int i = 0; i < values.length; i++) {
-			output += addends.values[i] * weights.values[i];
+		for (int i = 0; i < values.flat.length; i++) {
+			sum += addends.values.flat[i] * weights.values.flat[i];
 		}
 
-		values[0] = output;
+		values.flat[0] = sum;
 	}
 
 	@Override
@@ -38,14 +37,14 @@ public final class WeightedSum extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (addends instanceof Derivable) {
-			for (int i = 0; i < derivatives.length; i++) {
-				((Derivable) addends).derivatives[i] += derivatives[0] * weights.values[i];
+			for (int i = 0; i < derivatives.flat.length; i++) {
+				((Derivable) addends).derivatives.flat[i] += derivatives.flat[0] * weights.values.flat[i];
 			}
 		}
 
 		if (weights instanceof Derivable) {
-			for (int i = 0; i < derivatives.length; i++) {
-				((Derivable) weights).derivatives[i] += derivatives[0] * addends.values[i];
+			for (int i = 0; i < derivatives.flat.length; i++) {
+				((Derivable) weights).derivatives.flat[i] += derivatives.flat[0] * addends.values.flat[i];
 			}
 		}
 	}

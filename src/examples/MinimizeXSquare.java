@@ -1,6 +1,7 @@
 package examples;
 
 import reverseGraph.OptimizationGraph;
+import reverseGraph.data.Tensor;
 import reverseGraph.nodes.Param;
 import reverseGraph.nodes.operations.Multiplication;
 import reverseGraph.nodes.operations.Operation;
@@ -14,13 +15,13 @@ public class MinimizeXSquare {
 	public static void main(String[] args) {
 
 		// Create a parameter and set its value to 5
-		Param x = new Param(new double[] { 5 });
+		Param x = new Param(Tensor.createScalar(5));
 
 		// Create an operation that squares that parameter
 		Operation square = new Multiplication(x, x);
 
 		// Create an optimizer to update the parameter by 0.2 time the derivative
-		Optimizer optimizer = new SGD(0.2);
+		Optimizer optimizer = new SGD(0.1);
 
 		// Create a graph to compute and optimize the function x^2
 		OptimizationGraph graph = new OptimizationGraph(square, optimizer);

@@ -1,25 +1,30 @@
 package reverseGraph.nodes;
 
-public abstract class Node {
-	public final double[] values;
+import reverseGraph.data.Dimensions;
+import reverseGraph.data.Tensor;
 
-	protected Node(int outSize) {
-		values = new double[outSize];
+public abstract class Node {
+	public final Tensor values;
+
+	protected Node(Dimensions dimensions) {
+		values = new Tensor(dimensions);
 	}
 
-	protected Node(double[] values) {
-		this.values = values;
+	protected Node(Tensor values) {
+		this.values = values.clone();
 	}
 
 	@Override
 	public String toString() {
-		String str = "{";
+		StringBuilder str = new StringBuilder("{");
 
-		for (int i = 0; i < values.length - 1; i++) {
-			str += values[i] + ", ";
+		for (int i = 0; i < values.flat.length - 1; i++) {
+			str.append(values.flat[i]);
+			str.append(", ");
 		}
 
-		str += values[values.length - 1] + "}";
+		str.append(values.flat[values.flat.length - 1]);
+		str.append("}");
 
 		return String.valueOf(str);
 	}

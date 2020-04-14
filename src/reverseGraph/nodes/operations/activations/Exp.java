@@ -8,14 +8,14 @@ public final class Exp extends Operation {
 	private final Node inputs;
 
 	public Exp(Node inputs) {
-		super(inputs.values.length);
+		super(inputs.values.dimensions);
 		this.inputs = inputs;
 	}
 
 	@Override
 	public void compute() {
-		for (int i = 0; i < values.length; i++) {
-			values[i] = Math.exp(inputs.values[i]);
+		for (int i = 0; i < values.flat.length; i++) {
+			values.flat[i] = Math.exp(inputs.values.flat[i]);
 		}
 	}
 
@@ -27,8 +27,8 @@ public final class Exp extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (this.inputs instanceof Derivable) {
-			for (int i = 0; i < derivatives.length; i++) {
-				((Derivable) inputs).derivatives[i] += derivatives[i] * values[i];
+			for (int i = 0; i < derivatives.flat.length; i++) {
+				((Derivable) inputs).derivatives.flat[i] += derivatives.flat[i] * values.flat[i];
 			}
 		}
 	}

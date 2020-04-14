@@ -8,14 +8,14 @@ public final class Sqrt extends Operation {
 	private final Node inputs;
 
 	public Sqrt(Node inputs) {
-		super(inputs.values.length);
+		super(inputs.values.dimensions);
 		this.inputs = inputs;
 	}
 
 	@Override
 	public void compute() {
-		for (int i = 0; i < values.length; i++) {
-			values[i] = Math.sqrt(inputs.values[i]);
+		for (int i = 0; i < values.flat.length; i++) {
+			values.flat[i] = Math.sqrt(inputs.values.flat[i]);
 		}
 	}
 
@@ -27,8 +27,8 @@ public final class Sqrt extends Operation {
 	@Override
 	public void computeDependenciesDerivatives() {
 		if (inputs instanceof Derivable) {
-			for (int i = 0; i < derivatives.length; i++) {
-				((Derivable) inputs).derivatives[i] += derivatives[i] / (2 * Math.sqrt(inputs.values[i]));
+			for (int i = 0; i < derivatives.flat.length; i++) {
+				((Derivable) inputs).derivatives.flat[i] += derivatives.flat[i] / (2 * values.flat[i]);
 			}
 		}
 	}

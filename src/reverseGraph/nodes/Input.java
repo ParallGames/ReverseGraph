@@ -1,21 +1,18 @@
 package reverseGraph.nodes;
 
-import reverseGraph.WrongSizeException;
+import reverseGraph.data.Dimensions;
+import reverseGraph.data.Tensor;
 
 public final class Input extends Node {
-	public Input(int outSize) {
-		super(outSize);
+	public Input(Dimensions dimensions) {
+		super(dimensions);
 	}
 
-	public Input(double[] initialValues) {
+	public Input(Tensor initialValues) {
 		super(initialValues);
 	}
 
-	public void setValues(double[] values) {
-		if (values.length != this.values.length) {
-			throw new WrongSizeException(values.length, this.values.length);
-		}
-
-		System.arraycopy(values, 0, this.values, 0, values.length);
+	public void setValues(Tensor values) {
+		this.values.set(values);
 	}
 }
