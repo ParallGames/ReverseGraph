@@ -21,7 +21,7 @@ public class MinimizeXSquare {
 		Operation square = new Multiplication(x, x);
 
 		// Create an optimizer to update the parameter by 0.2 time the derivative
-		Optimizer optimizer = new SGD(0.1);
+		Optimizer optimizer = new SGD(0.2);
 
 		// Create a graph to compute and optimize the function x^2
 		OptimizationGraph graph = new OptimizationGraph(square, optimizer);
@@ -30,16 +30,16 @@ public class MinimizeXSquare {
 			// Compute the value of x^2
 			graph.compute();
 
-			// Compute the derivatives of the function
-			graph.computeDerivatives();
-
-			// Update the parameter by removing 0.2 time the derivative
-			graph.minimize();
-
 			// Print the parameter and function output values
 			System.out.println("X value : " + x);
 			System.out.println("Function output : " + square);
 			System.out.println();
+
+			// Compute the derivatives of the function
+			graph.computeDerivatives();
+
+			// Update the parameter by using the optimizer
+			graph.minimize();
 		}
 	}
 }

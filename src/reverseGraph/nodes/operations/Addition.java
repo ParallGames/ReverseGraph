@@ -39,7 +39,7 @@ public final class Addition extends Operation {
 			}
 		}
 
-		if (addend1 instanceof Derivable) {
+		if (addend2 instanceof Derivable) {
 			Derivable derivable = ((Derivable) addend2);
 
 			for (int i = 0; i < derivatives.flat.length; i++) {

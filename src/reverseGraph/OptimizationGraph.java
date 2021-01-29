@@ -88,6 +88,27 @@ public final class OptimizationGraph {
 		}
 	}
 
+	/**
+	 * Maximizes the graph output by updating its parameters
+	 */
+	public void maximize() {
+		int index = 0;
+
+		for (int i = 0; i < params.length; i++) {
+			for (int a = 0; a < params[i].values.flat.length; a++) {
+				double gradient = params[i].derivatives.flat[a] + l1 * params[i].values.flat[a];
+
+				params[i].values.flat[a] += optimizer.computeUpdate(index, gradient);
+
+				index++;
+			}
+
+			for (int a = 0; a < params[i].derivatives.flat.length; a++) {
+				params[i].derivatives.flat[a] = 0;
+			}
+		}
+	}
+
 	private static Param[] findDependentNodes(Operation operation, ArrayList<Operation> operationsList) {
 		final HashSet<Operation> operationsSet = new HashSet<>();
 		final HashSet<Param> paramsSet = new HashSet<>();
