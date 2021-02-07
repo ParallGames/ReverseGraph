@@ -16,7 +16,7 @@ public class RecurrentLayerBuilder {
 	final Operation[] outputs;
 
 	public RecurrentLayerBuilder(Node[] inputs, LayerModel model) {
-		this.weights = Util.createXavierWeights(inputs.length, model.outputSize);
+		this.weights = Util.createNormalizedWeights(inputs.length, model.outputSize);
 		this.biases = new Param(new Dimensions(model.outputSize));
 		this.recurrencesWeights = new Param(new Dimensions(model.outputSize));
 

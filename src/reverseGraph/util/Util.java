@@ -31,11 +31,11 @@ public class Util {
 		return param;
 	}
 
-	public static Param createXavierWeights(int inputSize, int outputSize) {
+	public static Param createNormalizedWeights(int inputSize, int outputSize) {
 		Param param = new Param(new Dimensions(inputSize, outputSize));
 
 		for (int i = 0; i < param.values.flat.length; i++) {
-			param.values.flat[i] = rand.nextGaussian() * 2 / (inputSize + outputSize);
+			param.values.flat[i] = rand.nextGaussian() * Math.sqrt(6.0 / (inputSize + outputSize));
 		}
 
 		return param;
