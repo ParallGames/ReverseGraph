@@ -15,8 +15,6 @@ public final class OptimizationGraph {
 
 	private final Optimizer optimizer;
 
-	private double l1 = 0;
-
 	/**
 	 * Constructs a graph to compute an operation and its dependencies
 	 *
@@ -73,16 +71,9 @@ public final class OptimizationGraph {
 	public void minimize() {
 		int index = 0;
 
-		for (int i = 0; i < params.length; i++) {
-			for (int a = 0; a < params[i].values.flat.length; a++) {
-				double gradient = params[i].derivatives.flat[a] + l1 * params[i].values.flat[a];
-
-				params[i].values.flat[a] -= optimizer.computeUpdate(index, gradient);
-
-				index++;
-			}
-
-			for (int a = 0; a < params[i].derivatives.flat.length; a++) {
+		for (int i = params.length - 1; i >= 0; i--) {
+			for (int a = params[i].values.flat.length - 1; a >= 0; a--) {
+				params[i].values.flat[a] -= optimizer.computeUpdate(index++, params[i].derivatives.flat[a]);
 				params[i].derivatives.flat[a] = 0;
 			}
 		}
@@ -94,16 +85,9 @@ public final class OptimizationGraph {
 	public void maximize() {
 		int index = 0;
 
-		for (int i = 0; i < params.length; i++) {
-			for (int a = 0; a < params[i].values.flat.length; a++) {
-				double gradient = params[i].derivatives.flat[a] + l1 * params[i].values.flat[a];
-
-				params[i].values.flat[a] += optimizer.computeUpdate(index, gradient);
-
-				index++;
-			}
-
-			for (int a = 0; a < params[i].derivatives.flat.length; a++) {
+		for (int i = params.length - 1; i >= 0; i--) {
+			for (int a = params[i].values.flat.length - 1; a >= 0; a--) {
+				params[i].values.flat[a] += optimizer.computeUpdate(index++, params[i].derivatives.flat[a]);
 				params[i].derivatives.flat[a] = 0;
 			}
 		}
@@ -142,9 +126,5 @@ public final class OptimizationGraph {
 		});
 
 		return operationsList.toArray(new Operation[0]);
-	}
-
-	public void setL1Regularization(double l1) {
-		this.l1 = l1;
 	}
 }

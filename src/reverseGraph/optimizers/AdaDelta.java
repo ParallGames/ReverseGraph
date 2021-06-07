@@ -28,7 +28,7 @@ public final class AdaDelta extends Optimizer {
 		meanGradient[index] *= decay;
 		meanGradient[index] += (1 - decay) * gradient * gradient;
 
-		double update = gradient * Math.sqrt(meanUpdate[index] + 1e-8) / Math.sqrt(meanGradient[index] + 1e-8);
+		double update = gradient * Math.sqrt((meanUpdate[index] + 1e-6) / (meanGradient[index] + 1e-6));
 
 		meanUpdate[index] *= decay;
 		meanUpdate[index] += (1 - decay) * update * update;

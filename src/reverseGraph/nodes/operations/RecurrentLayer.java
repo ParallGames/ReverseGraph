@@ -32,16 +32,9 @@ public final class RecurrentLayer extends Operation {
 		for (int o = 0; o < values.flat.length; o++) {
 			values.flat[o] = biases.values.flat[o] + recurrences.values.flat[o] * recurrencesWeights.values.flat[o];
 			for (int i = 0; i < inputs.values.flat.length; i++) {
-				values.flat[o] += inputs.values.flat[i] * weights.values.get(i, o);
+				values.flat[o] += inputs.values.flat[i] * weights.values.flat[o + i * values.flat.length];
 			}
 		}
-
-		/*
-		 * for (int o = 0; o < values.flat.length; o++) { values[o] = biases.values[o] +
-		 * recurrences.values[o] * recurrencesWeights.values[o]; for (int i = 0; i <
-		 * inputs.values.length; i++) { values[o] += inputs.values[i] * weights.values[o
-		 * * inputs.values.length + i]; } }
-		 */
 	}
 
 	@Override
@@ -64,7 +57,8 @@ public final class RecurrentLayer extends Operation {
 
 			for (int o = 0; o < derivatives.flat.length; o++) {
 				for (int i = 0; i < inputs.values.flat.length; i++) {
-					derivable.derivatives.add(inputs.values.flat[i] * derivatives.flat[o], i, o);
+					derivable.derivatives.flat[o + i * values.flat.length] += inputs.values.flat[i]
+							* derivatives.flat[o];
 				}
 			}
 		}
@@ -74,7 +68,8 @@ public final class RecurrentLayer extends Operation {
 
 			for (int i = 0; i < inputs.values.flat.length; i++) {
 				for (int o = 0; o < derivatives.flat.length; o++) {
-					derivable.derivatives.flat[i] += weights.values.get(i, o) * derivatives.flat[o];
+					derivable.derivatives.flat[i] += weights.values.flat[o + i * values.flat.length]
+							* derivatives.flat[o];
 				}
 			}
 		}

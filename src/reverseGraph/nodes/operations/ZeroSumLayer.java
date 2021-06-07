@@ -5,12 +5,12 @@ import reverseGraph.exceptions.Assert;
 import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 
-public final class Layer extends Operation {
+public final class ZeroSumLayer extends Operation {
 	private final Node inputs;
 	private final Node weights;
 	private final Node biases;
 
-	public Layer(Node inputs, Node weights, Node biases) {
+	public ZeroSumLayer(Node inputs, Node weights, Node biases) {
 		super(biases.values.dimensions);
 
 		Assert.sameDimensions(weights.values.dimensions,
@@ -23,10 +23,16 @@ public final class Layer extends Operation {
 
 	@Override
 	public void compute() {
-		System.arraycopy(biases.values.flat, 0, values.flat, 0, biases.values.flat.length);
 		for (int o = 0; o < values.flat.length; o++) {
+			double sum = 0;
 			for (int i = 0; i < inputs.values.flat.length; i++) {
-				values.flat[o] += inputs.values.flat[i] * weights.values.flat[o + i * values.flat.length];
+				sum += weights.values.flat[o + i * values.flat.length];
+			}
+			double mean = sum / inputs.values.flat.length;
+
+			values.flat[o] = biases.values.flat[o];
+			for (int i = 0; i < inputs.values.flat.length; i++) {
+				values.flat[o] += inputs.values.flat[i] * (weights.values.flat[o + i * values.flat.length] - mean);
 			}
 		}
 	}
@@ -49,9 +55,15 @@ public final class Layer extends Operation {
 		if (weights instanceof Derivable) {
 			Derivable derivable = (Derivable) weights;
 
+			double inputMean = 0;
+			for (int i = 0; i < inputs.values.flat.length; i++) {
+				inputMean += inputs.values.flat[i];
+			}
+			inputMean /= inputs.values.flat.length;
+
 			for (int o = 0; o < derivatives.flat.length; o++) {
 				for (int i = 0; i < inputs.values.flat.length; i++) {
-					derivable.derivatives.flat[o + i * values.flat.length] += inputs.values.flat[i]
+					derivable.derivatives.flat[o + i * values.flat.length] += (inputs.values.flat[i] - inputMean)
 							* derivatives.flat[o];
 				}
 			}
@@ -60,9 +72,15 @@ public final class Layer extends Operation {
 		if (inputs instanceof Derivable) {
 			Derivable derivable = (Derivable) inputs;
 
-			for (int i = 0; i < inputs.values.flat.length; i++) {
-				for (int o = 0; o < derivatives.flat.length; o++) {
-					derivable.derivatives.flat[i] += weights.values.flat[o + i * values.flat.length]
+			for (int o = 0; o < derivatives.flat.length; o++) {
+				double sum = 0;
+				for (int i = 0; i < inputs.values.flat.length; i++) {
+					sum += weights.values.flat[o + i * values.flat.length];
+				}
+				double mean = sum / inputs.values.flat.length;
+
+				for (int i = 0; i < inputs.values.flat.length; i++) {
+					derivable.derivatives.flat[i] += (weights.values.flat[o + i * values.flat.length] - mean)
 							* derivatives.flat[o];
 				}
 			}

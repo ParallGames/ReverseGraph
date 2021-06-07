@@ -33,7 +33,7 @@ public final class RMSprop extends Optimizer {
 		gradientRMS[index] *= decay;
 		gradientRMS[index] += gradient * gradient * (1 - decay);
 
-		return learningRate * gradient / Math.sqrt(gradientRMS[index] + 1e-8);
+		return learningRate * gradient / Math.sqrt(gradientRMS[index] + 0.001);
 	}
 
 	@Override
