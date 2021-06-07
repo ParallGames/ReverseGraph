@@ -17,7 +17,7 @@ public class Elu extends Operation {
 		for (int i = 0; i < values.flat.length; i++) {
 			double n = inputs.values.flat[i];
 
-			values.flat[i] = n > 0 ? n : Math.exp(n) - 1;
+			values.flat[i] = (n > 0) ? n : (Math.exp(n) - 1);
 		}
 	}
 
@@ -30,7 +30,7 @@ public class Elu extends Operation {
 	public void computeDependenciesDerivatives() {
 		if (inputs instanceof Derivable) {
 			for (int i = 0; i < derivatives.flat.length; i++) {
-				double n = values.flat[i];
+				double n = inputs.values.flat[i];
 
 				((Derivable) inputs).derivatives.flat[i] += (n > 0 ? 1 : Math.exp(n)) * derivatives.flat[i];
 			}
