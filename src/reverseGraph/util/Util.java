@@ -70,7 +70,7 @@ public class Util {
 	public static Operation createNegativeLogLikelihood(Node output, Node desiredOutput) {
 		return new Negate(new Sum(new Multiplication(new Log(output), desiredOutput)));
 	}
-	
+
 	public static Constant createConstant(double value) {
 		Tensor t = new Tensor(Dimensions.SCALAR);
 		t.flat[0] = value;

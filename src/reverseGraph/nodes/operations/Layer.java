@@ -24,11 +24,12 @@ public final class Layer extends Operation {
 	@Override
 	public void compute() {
 		System.arraycopy(biases.values.flat, 0, values.flat, 0, biases.values.flat.length);
-		for (int o = 0; o < values.flat.length; o++) {
-			for (int i = 0; i < inputs.values.flat.length; i++) {
+		for (int i = 0; i < inputs.values.flat.length; i++) {
+			for (int o = 0; o < values.flat.length; o++) {
 				values.flat[o] += inputs.values.flat[i] * weights.values.flat[o + i * values.flat.length];
 			}
 		}
+
 	}
 
 	@Override
@@ -49,8 +50,8 @@ public final class Layer extends Operation {
 		if (weights instanceof Derivable) {
 			Derivable derivable = (Derivable) weights;
 
-			for (int o = 0; o < derivatives.flat.length; o++) {
-				for (int i = 0; i < inputs.values.flat.length; i++) {
+			for (int i = 0; i < inputs.values.flat.length; i++) {
+				for (int o = 0; o < derivatives.flat.length; o++) {
 					derivable.derivatives.flat[o + i * values.flat.length] += inputs.values.flat[i]
 							* derivatives.flat[o];
 				}
