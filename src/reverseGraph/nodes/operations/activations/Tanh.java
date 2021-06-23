@@ -15,7 +15,7 @@ public final class Tanh extends Operation {
 	@Override
 	public void compute() {
 		for (int i = 0; i < values.flat.length; i++) {
-			values.flat[i] = 2D / (1D + Math.exp(-2D * inputs.values.flat[i])) - 1D;
+			values.flat[i] = Math.tanh(inputs.values.flat[i]);
 		}
 	}
 

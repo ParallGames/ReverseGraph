@@ -53,7 +53,7 @@ public class SigmoidSquaredError extends Operation {
 
 				double expxinc = expx + 1;
 
-				((Derivable) output).derivatives.flat[i] -= (2D * expx * ((y - 1D) * expx + y))
+				((Derivable) output).derivatives.flat[i] -= 2D * expx * ((y - 1D) * expx + y)
 						/ (expxinc * expxinc * expxinc) * d;
 			}
 		}

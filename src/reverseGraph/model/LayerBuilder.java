@@ -14,7 +14,7 @@ public class LayerBuilder {
 	final Operation[] outputs;
 
 	public LayerBuilder(Node[] inputs, LayerModel model) {
-		this.weights = Util.createNormalizedWeights(inputs.length, model.outputSize);
+		this.weights = Util.createNormalizedTanhWeights(inputs.length, model.outputSize);
 		this.biases = new Param(new Dimensions(model.outputSize));
 
 		outputs = new Operation[inputs.length];

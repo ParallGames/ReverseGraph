@@ -1,12 +1,10 @@
 package reverseGraph.model;
 
-import reverseGraph.nodes.operations.DivideAll;
 import reverseGraph.nodes.operations.Operation;
-import reverseGraph.nodes.operations.Sum;
 import reverseGraph.nodes.operations.activations.Elu;
 import reverseGraph.nodes.operations.activations.LeakyRelu;
 import reverseGraph.nodes.operations.activations.Sigmoid;
-import reverseGraph.nodes.operations.activations.SoftmaxExp;
+import reverseGraph.nodes.operations.activations.Softmax;
 import reverseGraph.nodes.operations.activations.Tanh;
 
 public enum Activation {
@@ -25,9 +23,7 @@ public enum Activation {
 		case ELU:
 			return new Elu(input);
 		case SOFTMAX:
-			SoftmaxExp exp = new SoftmaxExp(input);
-
-			return new DivideAll(exp, new Sum(exp));
+			return new Softmax(input);
 		default:
 			throw new RuntimeException("Unknown activation");
 		}

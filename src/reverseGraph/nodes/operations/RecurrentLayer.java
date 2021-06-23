@@ -9,37 +9,44 @@ public final class RecurrentLayer extends Operation {
 	private final Node inputs;
 	private final Node weights;
 	private final Node biases;
-	private final Node recurrences;
-	private final Node recurrencesWeights;
+	private final Node recurrence;
+	private final Node recurrenceWeights;
 
-	public RecurrentLayer(Node inputs, Node weights, Node biases, Node recurrences, Node recurrencesWeights) {
+	public RecurrentLayer(Node inputs, Node weights, Node biases, Node recurrence, Node recurrenceWeights) {
 		super(biases.values.dimensions);
 
 		Assert.sameDimensions(weights.values.dimensions,
 				new Dimensions(inputs.values.flat.length, biases.values.flat.length));
-		Assert.sameDimensions(biases.values.dimensions, recurrences.values.dimensions);
-		Assert.sameDimensions(biases.values.dimensions, recurrencesWeights.values.dimensions);
+		Assert.sameDimensions(recurrenceWeights.values.dimensions, new Dimensions(recurrence.values.flat.length, biases.values.flat.length));
+		Assert.sameDimensions(recurrence.values.dimensions, biases.values.dimensions);
 
 		this.inputs = inputs;
 		this.weights = weights;
 		this.biases = biases;
-		this.recurrences = recurrences;
-		this.recurrencesWeights = recurrencesWeights;
+		this.recurrence = recurrence;
+		this.recurrenceWeights = recurrenceWeights;
 	}
 
 	@Override
 	public void compute() {
-		for (int o = 0; o < values.flat.length; o++) {
-			values.flat[o] = biases.values.flat[o] + recurrences.values.flat[o] * recurrencesWeights.values.flat[o];
-			for (int i = 0; i < inputs.values.flat.length; i++) {
+		System.arraycopy(biases.values.flat, 0, values.flat, 0, biases.values.flat.length);
+		for (int i = 0; i < inputs.values.flat.length; i++) {
+			for (int o = 0; o < values.flat.length; o++) {
 				values.flat[o] += inputs.values.flat[i] * weights.values.flat[o + i * values.flat.length];
 			}
 		}
+		
+		for (int i = 0; i < recurrence.values.flat.length; i++) {
+			for (int o = 0; o < values.flat.length; o++) {
+				values.flat[o] += recurrence.values.flat[i] * recurrenceWeights.values.flat[o + i * values.flat.length];
+			}
+		}
+
 	}
 
 	@Override
 	public Node[] getDependencies() {
-		return new Node[] { inputs, weights, biases, recurrences, recurrencesWeights };
+		return new Node[] { inputs, weights, biases };
 	}
 
 	@Override
@@ -55,8 +62,8 @@ public final class RecurrentLayer extends Operation {
 		if (weights instanceof Derivable) {
 			Derivable derivable = (Derivable) weights;
 
-			for (int o = 0; o < derivatives.flat.length; o++) {
-				for (int i = 0; i < inputs.values.flat.length; i++) {
+			for (int i = 0; i < inputs.values.flat.length; i++) {
+				for (int o = 0; o < derivatives.flat.length; o++) {
 					derivable.derivatives.flat[o + i * values.flat.length] += inputs.values.flat[i]
 							* derivatives.flat[o];
 				}
@@ -73,20 +80,26 @@ public final class RecurrentLayer extends Operation {
 				}
 			}
 		}
+		
+		if (recurrenceWeights instanceof Derivable) {
+			Derivable derivable = (Derivable) recurrenceWeights;
 
-		if (recurrences instanceof Derivable) {
-			Derivable derivable = (Derivable) recurrences;
-
-			for (int i = 0; i < derivatives.flat.length; i++) {
-				derivable.derivatives.flat[i] += derivatives.flat[i] * recurrencesWeights.values.flat[i];
+			for (int i = 0; i < recurrence.values.flat.length; i++) {
+				for (int o = 0; o < derivatives.flat.length; o++) {
+					derivable.derivatives.flat[o + i * values.flat.length] += recurrence.values.flat[i]
+							* derivatives.flat[o];
+				}
 			}
 		}
 
-		if (recurrencesWeights instanceof Derivable) {
-			Derivable derivable = (Derivable) recurrencesWeights;
+		if (recurrence instanceof Derivable) {
+			Derivable derivable = (Derivable) recurrence;
 
-			for (int i = 0; i < derivatives.flat.length; i++) {
-				derivable.derivatives.flat[i] += derivatives.flat[i] * recurrences.values.flat[i];
+			for (int i = 0; i < recurrence.values.flat.length; i++) {
+				for (int o = 0; o < derivatives.flat.length; o++) {
+					derivable.derivatives.flat[i] += recurrenceWeights.values.flat[o + i * values.flat.length]
+							* derivatives.flat[o];
+				}
 			}
 		}
 	}

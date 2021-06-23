@@ -30,17 +30,37 @@ public class Util {
 
 		return param;
 	}
-
-	public static Param createNormalizedWeights(int inputSize, int outputSize) {
+	
+	public static Param createNormalizedSigmoidWeights(int inputSize, int outputSize) {
 		Param param = new Param(new Dimensions(inputSize, outputSize));
 
 		for (int i = 0; i < param.values.flat.length; i++) {
-			param.values.flat[i] = rand.nextGaussian() * Math.sqrt(6.0 / (inputSize + outputSize));
+			param.values.flat[i] = (rand.nextDouble() * 2 - 1) * Math.sqrt(96.0 / (inputSize + outputSize));
 		}
 
 		return param;
 	}
 
+	public static Param createNormalizedTanhWeights(int inputSize, int outputSize) {
+		Param param = new Param(new Dimensions(inputSize, outputSize));
+
+		for (int i = 0; i < param.values.flat.length; i++) {
+			param.values.flat[i] = (rand.nextDouble() * 2 - 1) * Math.sqrt(6.0 / (inputSize + outputSize));
+		}
+
+		return param;
+	}
+
+	public static Param createNormalizedReluWeights(int inputSize, int outputSize) {
+		Param param = new Param(new Dimensions(inputSize, outputSize));
+
+		for (int i = 0; i < param.values.flat.length; i++) {
+			param.values.flat[i] = (rand.nextDouble() * 2 - 1) * Math.sqrt(6.0 / inputSize);
+		}
+
+		return param;
+	}
+	
 	public static Operation createSquareError(Node output, Node desiredOutput) {
 		return new Sum(new Square(new Subtraction(output, desiredOutput)));
 	}

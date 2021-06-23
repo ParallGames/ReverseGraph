@@ -4,26 +4,19 @@ import reverseGraph.nodes.Derivable;
 import reverseGraph.nodes.Node;
 import reverseGraph.nodes.operations.Operation;
 
-public class SoftmaxExp extends Operation {
+public final class Relu extends Operation {
 	private final Node inputs;
 
-	public SoftmaxExp(Node inputs) {
+	public Relu(Node inputs) {
 		super(inputs.values.dimensions);
 		this.inputs = inputs;
 	}
 
 	@Override
 	public void compute() {
-		double max = Double.NEGATIVE_INFINITY;
-
-		for (int i = 0; i < inputs.values.flat.length; i++) {
-			if (inputs.values.flat[i] > max) {
-				max = inputs.values.flat[i];
-			}
-		}
-
 		for (int i = 0; i < values.flat.length; i++) {
-			values.flat[i] = Math.exp(inputs.values.flat[i] - max);
+			double input = inputs.values.flat[i];
+			values.flat[i] = input > 0D ? input : 0;
 		}
 	}
 
@@ -34,9 +27,11 @@ public class SoftmaxExp extends Operation {
 
 	@Override
 	public void computeDependenciesDerivatives() {
-		if (this.inputs instanceof Derivable) {
+		if (inputs instanceof Derivable) {
 			for (int i = 0; i < derivatives.flat.length; i++) {
-				((Derivable) inputs).derivatives.flat[i] += derivatives.flat[i] * values.flat[i];
+				if(inputs.values.flat[i] > 0) {
+					((Derivable) inputs).derivatives.flat[i] += derivatives.flat[i];
+				}
 			}
 		}
 	}
