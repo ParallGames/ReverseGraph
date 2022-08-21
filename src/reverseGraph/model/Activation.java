@@ -8,13 +8,13 @@ import reverseGraph.nodes.operations.activations.Softmax;
 import reverseGraph.nodes.operations.activations.Tanh;
 
 public enum Activation {
-	IDENTITY, SIGMOID, TANH, LEAKYRELU, ELU, SOFTMAX;
+	IDENTITY, SIGMOID, TANH, LEAKY_RELU, ELU, SOFTMAX;
 
 	public Operation apply(Operation input) {
 		switch (this) {
 		case IDENTITY:
 			return input;
-		case LEAKYRELU:
+		case LEAKY_RELU:
 			return new LeakyRelu(input);
 		case SIGMOID:
 			return new Sigmoid(input);

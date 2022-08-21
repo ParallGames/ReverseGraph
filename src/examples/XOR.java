@@ -21,7 +21,7 @@ public class XOR {
 
 		// Create net model
 		LayerModel[] layers = new LayerModel[2];
-		layers[0] = new LayerModel(10, Activation.LEAKYRELU);
+		layers[0] = new LayerModel(10, Activation.LEAKY_RELU);
 		layers[1] = new LayerModel(1, Activation.TANH);
 
 		NeuralNetwork net = new NeuralNetwork(inputs, layers);

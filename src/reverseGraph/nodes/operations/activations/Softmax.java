@@ -49,19 +49,22 @@ public class Softmax extends Operation {
 					max = inputs.values.flat[i];
 				}
 			}
-			
-			double sum = 0;
-			
+
+			double allexp = 0;
+			double weights = 0;
+
 			for (int i = 0; i < inputs.values.flat.length; i++) {
-				sum += Math.exp(inputs.values.flat[i] - max);
+				double exp = Math.exp(inputs.values.flat[i] - max);
+				allexp += exp;
+				weights += exp * derivatives.flat[i];
 			}
 			
-			double sum2 = sum * sum;
+			double allexp2 = allexp * allexp;
 			
 			for (int i = 0; i < derivatives.flat.length; i++) {
 				double exp = Math.exp(inputs.values.flat[i]);
 				
-				((Derivable) inputs).derivatives.flat[i] += derivatives.flat[i] * exp * (sum - exp) / sum2;
+				((Derivable) inputs).derivatives.flat[i] += (derivatives.flat[i] * (allexp - exp) - weights + exp * derivatives.flat[i]) * exp / allexp2;
 			}
 			
 		}
